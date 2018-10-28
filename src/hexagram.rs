@@ -1,7 +1,7 @@
-use serde_derive::Deserialize;
 use crate::line::LineMeaning;
-use crate::trigram::TrigramPair;
 use crate::trigram::RawTrigramPair;
+use crate::trigram::TrigramPair;
+use serde_derive::Deserialize;
 use std::fmt::{
     self,
     Display,
@@ -32,12 +32,12 @@ pub struct NameTranslations {
 }
 
 pub struct Hexagram {
-    _number: i32,
-    _name: NameTranslations,
-    _trigram_pair: TrigramPair,
-    _judgement: String,
     _images: String,
+    _judgement: String,
     _lines: Vec<LineMeaning>,
+    _name: NameTranslations,
+    _number: i32,
+    _trigram_pair: TrigramPair,
 }
 
 impl Hexagram {
@@ -69,6 +69,8 @@ impl From<RawHexagram> for Hexagram {
         Hexagram {
             _number: raw_hexagram.number,
             _name: raw_hexagram.name,
+            // An unwrap is safe here because it is assumed that this is only called by `Hexagrams`
+            // during initialization.
             _trigram_pair: TrigramPair::from_raw_trigram_pair(raw_hexagram.raw_trigram_pair).unwrap(),
             _judgement: raw_hexagram.judgement,
             _images: raw_hexagram.images,

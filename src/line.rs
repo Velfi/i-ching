@@ -1,10 +1,10 @@
-use std::fmt::Display;
-use std::fmt::Formatter;
-use std::fmt::Error;
-use rand::distributions::Standard;
 use rand::distributions::Distribution;
+use rand::distributions::Standard;
 use rand::Rng;
-use serde_derive::{Deserialize};
+use serde_derive::Deserialize;
+use std::fmt::Display;
+use std::fmt::Error;
+use std::fmt::Formatter;
 
 #[derive(Debug)]
 pub enum Line {
@@ -12,6 +12,23 @@ pub enum Line {
     Broken,
     Unbroken,
     UnbrokenChanging,
+}
+
+impl Line {
+    pub fn settle(self, with_change: bool) -> Line {
+        use self::Line::*;
+        if with_change {
+            match self {
+                Broken | UnbrokenChanging => Broken,
+                Unbroken | BrokenChanging => Unbroken,
+            }
+        } else {
+            match self {
+                Broken | BrokenChanging => Broken,
+                Unbroken | UnbrokenChanging => Unbroken,
+            }
+        }
+    }
 }
 
 impl Display for Line {

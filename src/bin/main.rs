@@ -1,12 +1,27 @@
 use clap::{App, Arg, ArgMatches};
 use iching::{
     Hexagrams,
-    line::Line,
     trigram::Trigram
 };
 
 fn main() {
-    let matches = App::new("I-Ching")
+    let matches = start_app_and_get_matches();
+
+    let mut hexagrams = Hexagrams::new();
+    hexagrams.initialize().expect("Initialization of hexagrams has failed");
+
+    if matches.is_present("hexagram") {
+        print_hexagram_by_number(matches, hexagrams);
+    } else if matches.is_present("trigram") {
+        print_trigram_by_number(matches);
+    } else {
+        let user_question = matches.value_of("question");
+        print_fortune(user_question);
+    }
+}
+
+fn start_app_and_get_matches() -> ArgMatches<'static> {
+    App::new("I-Ching")
         .version("1.0")
         .author("Zelda H. <zeldah@pm.me>")
         .about("Ever wish you could know the future? Well now you can!")
@@ -28,23 +43,7 @@ fn main() {
             .value_name("TRIGRAM NUMBER")
             .help("Look up a trigram by number")
             .takes_value(true))
-        .get_matches();
-
-    let mut hexagrams = Hexagrams::new();
-    hexagrams.initialize("C:\\projects\\iching\\target\\release\\hexagrams.json")
-        .expect("Initialization of hexagrams has failed");
-
-    if matches.is_present("hexagram") {
-        print_hexagram_by_number(matches, hexagrams);
-    } else if matches.is_present("trigram") {
-        print_trigram_by_number(matches);
-    } else {
-        println!("Consulting the oracle...");
-        for _ in 0..=6 {
-            let line: Line = rand::random();
-            println!("{}", line);
-        }
-    }
+        .get_matches()
 }
 
 fn print_hexagram_by_number(matches: ArgMatches, hexagrams: Hexagrams) {
@@ -72,3 +71,5 @@ fn print_trigram_by_number(matches: ArgMatches) {
         Err(error) => println!("No trigram for you: {}", error),
     }
 }
+
+fn print_fortune(question: Option<&str>) {}
