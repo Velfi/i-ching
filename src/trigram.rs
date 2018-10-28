@@ -1,7 +1,9 @@
+use crate::hexagram::Hexagram;
 use serde_derive::Deserialize;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
+use std::ops::Add;
 
 #[derive(Deserialize)]
 pub enum Trigram {
@@ -99,10 +101,8 @@ impl Trigram {
             Dui => String::from("third daughter"),
         }
     }
-}
 
-impl Trigram {
-    pub fn from_i32(number: i32) -> Result<Self, TrigramError> {
+    pub fn from_usize(number: usize) -> Result<Self, TrigramError> {
         use self::Trigram::*;
         match number {
             1 => Ok(Qian),
@@ -116,6 +116,33 @@ impl Trigram {
             _ => Err(TrigramError::IntegerOutOfRange)
         }
     }
+
+    pub fn number(&self) -> usize {
+        use self::Trigram::*;
+        match self {
+            Qian => 1,
+            Dui => 2,
+            Li => 3,
+            Zhen => 4,
+            Xun => 5,
+            Kan => 6,
+            Gen => 7,
+            Kun => 8,
+        }
+    }
+}
+
+impl Display for Trigram {
+    fn fmt(&self, f: &mut Formatter<>) -> Result<(), std::fmt::Error> {
+        writeln!(f, "{} (No. {})", self.symbol(), self.number());
+        writeln!(f, "{} - {}", self.romanized(), self.english_translation());
+        writeln!(f, "");
+        writeln!(f, "Attribute: {}", self.attribute());
+        writeln!(f, "Image in nature: {}", self.image());
+        writeln!(f, "Family Relationship: {}", self.family_relationship());
+
+        Ok(())
+    }
 }
 
 #[derive(Deserialize)]
@@ -126,14 +153,21 @@ pub struct TrigramPair {
 
 #[derive(Deserialize)]
 pub struct RawTrigramPair {
-    above: i32,
-    below: i32,
+    above: usize,
+    below: usize,
 }
 
 impl TrigramPair {
+    pub fn new(above: Trigram, below: Trigram) -> Self {
+        TrigramPair {
+            above,
+            below,
+        }
+    }
+
     pub fn from_raw_trigram_pair(raw_trigram_pair: RawTrigramPair) -> Result<Self, TrigramError> {
-        let above = Trigram::from_i32(raw_trigram_pair.above)?;
-        let below = Trigram::from_i32(raw_trigram_pair.below)?;
+        let above = Trigram::from_usize(raw_trigram_pair.above)?;
+        let below = Trigram::from_usize(raw_trigram_pair.below)?;
 
         Ok(TrigramPair {
             above,
@@ -209,6 +243,84 @@ impl TrigramPair {
             (Dui, Li) => String::from("䷰"),
             (Dui, Dui) => String::from("䷹"),
         }
+    }
+
+    pub fn king_wen_sequence(&self) -> usize {
+        use self::Trigram::*;
+        match (&self.above, &self.below) {
+            (Qian, Qian) => 1,
+            (Qian, Kun) => 1,
+            (Qian, Zhen) => 1,
+            (Qian, Kan) => 1,
+            (Qian, Gen) => 1,
+            (Qian, Xun) => 1,
+            (Qian, Li) => 1,
+            (Qian, Dui) => 1,
+            (Kun, Qian) => 1,
+            (Kun, Kun) => 1,
+            (Kun, Zhen) => 1,
+            (Kun, Kan) => 1,
+            (Kun, Gen) => 1,
+            (Kun, Xun) => 1,
+            (Kun, Li) => 1,
+            (Kun, Dui) => 1,
+            (Zhen, Qian) => 1,
+            (Zhen, Kun) => 1,
+            (Zhen, Zhen) => 1,
+            (Zhen, Kan) => 1,
+            (Zhen, Gen) => 1,
+            (Zhen, Xun) => 1,
+            (Zhen, Li) => 1,
+            (Zhen, Dui) => 1,
+            (Kan, Qian) => 1,
+            (Kan, Kun) => 1,
+            (Kan, Zhen) => 1,
+            (Kan, Kan) => 1,
+            (Kan, Gen) => 1,
+            (Kan, Xun) => 1,
+            (Kan, Li) => 1,
+            (Kan, Dui) => 1,
+            (Gen, Qian) => 1,
+            (Gen, Kun) => 1,
+            (Gen, Zhen) => 1,
+            (Gen, Kan) => 1,
+            (Gen, Gen) => 1,
+            (Gen, Xun) => 1,
+            (Gen, Li) => 1,
+            (Gen, Dui) => 1,
+            (Xun, Qian) => 1,
+            (Xun, Kun) => 1,
+            (Xun, Zhen) => 1,
+            (Xun, Kan) => 1,
+            (Xun, Gen) => 1,
+            (Xun, Xun) => 1,
+            (Xun, Li) => 1,
+            (Xun, Dui) => 1,
+            (Li, Qian) => 1,
+            (Li, Kun) => 1,
+            (Li, Zhen) => 1,
+            (Li, Kan) => 1,
+            (Li, Gen) => 1,
+            (Li, Xun) => 1,
+            (Li, Li) => 1,
+            (Li, Dui) => 1,
+            (Dui, Qian) => 1,
+            (Dui, Kun) => 1,
+            (Dui, Zhen) => 1,
+            (Dui, Kan) => 1,
+            (Dui, Gen) => 1,
+            (Dui, Xun) => 1,
+            (Dui, Li) => 1,
+            (Dui, Dui) => 1,
+        }
+    }
+}
+
+impl Add for Trigram {
+    type Output = TrigramPair;
+
+    fn add(self, other: Trigram) -> TrigramPair {
+        TrigramPair::new(self, other)
     }
 }
 

@@ -1,7 +1,8 @@
 use clap::{App, Arg, ArgMatches};
 use iching::{
-    line::Line,
     Hexagrams,
+    line::Line,
+    trigram::Trigram
 };
 
 fn main() {
@@ -21,6 +22,12 @@ fn main() {
             .value_name("HEXAGRAM NUMBER")
             .help("Look up a hexagram by number (King Wen sequence)")
             .takes_value(true))
+        .arg(Arg::with_name("trigram")
+            .short("t")
+            .long("trigram")
+            .value_name("TRIGRAM NUMBER")
+            .help("Look up a trigram by number")
+            .takes_value(true))
         .get_matches();
 
     let mut hexagrams = Hexagrams::new();
@@ -29,6 +36,8 @@ fn main() {
 
     if matches.is_present("hexagram") {
         print_hexagram_by_number(matches, hexagrams);
+    } else if matches.is_present("trigram") {
+        print_trigram_by_number(matches);
     } else {
         println!("Consulting the oracle...");
         for _ in 0..=6 {
@@ -48,5 +57,18 @@ fn print_hexagram_by_number(matches: ArgMatches, hexagrams: Hexagrams) {
             None => println!("Hexagrams number 1 to 64 but you asked for hexagram No. {}", hexagram_number),
         },
         Err(error) => println!("No hexagram for you: {}", error),
+    }
+}
+
+fn print_trigram_by_number(matches: ArgMatches) {
+    let trigram_number_string = matches.value_of("trigram").unwrap();
+    let trigram_number_result = trigram_number_string.parse::<usize>();
+
+    match trigram_number_result {
+        Ok(trigram_number) => match Trigram::from_usize(trigram_number) {
+            Ok(trigram) => println!("{}", trigram),
+            Err(_) => println!("Trigrams number 1 to 8 but you asked for trigram No. {}", trigram_number),
+        },
+        Err(error) => println!("No trigram for you: {}", error),
     }
 }
