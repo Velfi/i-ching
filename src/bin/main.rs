@@ -24,6 +24,7 @@ static APP_TITLE: &str = r#"
                                                Y8b d88P
                                                 'Y88P'
 Version"#;
+
 static APP_DESCRIPTION: &str = r#"
 Ever wish you could know the future? Well now you can!
 Divine the answers to life's greatest mysteries using
