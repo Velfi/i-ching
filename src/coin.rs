@@ -10,9 +10,10 @@ pub enum Coin {
 
 impl Distribution<Coin> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Coin {
-        match rng.gen_bool(0.5) {
-            false => Coin::Tails,
-            true => Coin::Heads,
+        if rng.gen_bool(0.5) {
+            Coin::Heads
+        } else {
+            Coin::Tails
         }
     }
 }

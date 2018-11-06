@@ -1,7 +1,6 @@
 use rand::distributions::Distribution;
 use rand::distributions::Standard;
 use rand::Rng;
-use serde_derive::Deserialize;
 use std::fmt::Display;
 use std::fmt::Error;
 use std::fmt::Formatter;
@@ -15,7 +14,7 @@ pub enum Line {
 }
 
 impl Line {
-    pub fn settle(self, with_change: bool) -> Line {
+    pub fn settle(&self, with_change: bool) -> Line {
         use self::Line::*;
         if with_change {
             match self {
@@ -28,6 +27,12 @@ impl Line {
                 Unbroken | UnbrokenChanging => Unbroken,
             }
         }
+    }
+}
+
+impl Default for Line {
+    fn default() -> Self {
+        rand::random()
     }
 }
 
@@ -52,10 +57,4 @@ impl Distribution<Line> for Standard {
             _ => Line::UnbrokenChanging,
         }
     }
-}
-
-#[derive(Deserialize)]
-pub struct LineMeaning {
-    position: String,
-    meaning: String
 }
