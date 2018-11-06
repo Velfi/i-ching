@@ -23,7 +23,6 @@ static APP_TITLE: &str = r#"
                                                     888
                                                Y8b d88P
                                                 'Y88P'
-
 Version"#;
 static APP_DESCRIPTION: &str = r#"
 Ever wish you could know the future? Well now you can!
@@ -59,19 +58,19 @@ fn start_app_and_get_matches() -> ArgMatches<'static> {
             .short("q")
             .long("question")
             .value_name("QUESTION")
-            .help("The question that you want answered")
+            .help("(A double-quoted string) A question that you wish to answer")
             .takes_value(true))
         .arg(Arg::with_name("hexagram")
             .short("h")
             .long("hexagram")
             .value_name("HEXAGRAM NUMBER")
-            .help("Look up a hexagram by number (King Wen sequence)")
+            .help("(A number 1-64) Look up a hexagram by number (King Wen sequence)")
             .takes_value(true))
         .arg(Arg::with_name("trigram")
             .short("t")
             .long("trigram")
             .value_name("TRIGRAM NUMBER")
-            .help("Look up a trigram by number")
+            .help("(A number 1-8) Look up a trigram by number")
             .takes_value(true))
         .get_matches()
 }

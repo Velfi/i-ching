@@ -12,7 +12,7 @@ name = "iching"
 path = "src/lib.rs"
 
 [[bin]]
-name = "iching_cli"
+name = "iching"
 path = "src/bin/main.rs"
 
 [dependencies]
