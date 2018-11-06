@@ -1,78 +1,55 @@
-use serde_derive::Deserialize;
-use crate::line::LineMeaning;
-use crate::trigram::TrigramPair;
-use crate::trigram::RawTrigramPair;
-use std::fmt::{
+use crate::trigram::{
     self,
-    Display,
-    Formatter,
+    Trigram,
+    trigram_name_pair_as_symbol,
+    TrigramNamePair,
 };
 
-#[derive(Deserialize)]
-pub struct RawHexagram {
-    number: i32,
-    name: NameTranslations,
-    #[serde(rename = "trigramPair")]
-    raw_trigram_pair: RawTrigramPair,
-    judgement: String,
-    images: String,
-    lines: Vec<LineMeaning>,
-}
-
-impl Default for RawHexagram {
-    fn default() -> Self {
-        unimplemented!()
-    }
-}
-
-#[derive(Deserialize)]
-pub struct NameTranslations {
-    english: String,
-    chinese: String,
+#[derive(Clone, Copy)]
+pub enum HexagramOrdering {
+    KingWen,
+    // a.k.a Fu Xi sequence, , Shao Yong sequence
+    Binary,
+    Mawangdui,
+    EightPalaces,
 }
 
 pub struct Hexagram {
-    _number: i32,
-    _name: NameTranslations,
-    _trigram_pair: TrigramPair,
-    _judgement: String,
-    _images: String,
-    _lines: Vec<LineMeaning>,
+    _above: Trigram,
+    _below: Trigram,
 }
 
 impl Hexagram {
-    pub fn english_name(&self) -> &str {
-        &self._name.english
+    pub fn new() -> Self {
+        Self::default()
     }
 
-    pub fn chinese_name(&self) -> &str {
-        &self._name.chinese
+    pub fn symbol(&self, with_changes: bool) -> &str {
+        trigram_name_pair_as_symbol(&self.as_trigram_name_pair(with_changes))
+    }
+
+    pub fn as_number(&self, with_changes: bool, sequence: HexagramOrdering) -> usize {
+        use self::HexagramOrdering::*;
+        let trigram_name_pair: TrigramNamePair = self.as_trigram_name_pair(with_changes);
+
+        match sequence {
+            KingWen => trigram::king_wen_sequence_number(&trigram_name_pair),
+            Binary => trigram::binary_sequence_number(&trigram_name_pair),
+            Mawangdui => trigram::mawangdui_sequence_number(&trigram_name_pair),
+            EightPalaces => trigram::eight_palaces_sequence_number(&trigram_name_pair),
+        }
+    }
+
+    pub fn as_trigram_name_pair(&self, with_changes: bool) -> TrigramNamePair {
+        (self._above.get_name(with_changes), self._below.get_name(with_changes))
     }
 }
 
-impl Display for Hexagram {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        writeln!(f, "  {} (No. {})", self._trigram_pair.symbol(), self._number);
-        writeln!(f, "  {} - {}", self.chinese_name(), self.english_name());
-        writeln!(f, "");
-        writeln!(f, "  Judgement:");
-        writeln!(f, "{}", self._judgement);
-        writeln!(f, "  Images:");
-        writeln!(f, "{}", self._images);
-
-        Ok(())
-    }
-}
-
-impl From<RawHexagram> for Hexagram {
-    fn from(raw_hexagram: RawHexagram) -> Self {
+impl Default for Hexagram {
+    fn default() -> Self {
         Hexagram {
-            _number: raw_hexagram.number,
-            _name: raw_hexagram.name,
-            _trigram_pair: TrigramPair::from_raw_trigram_pair(raw_hexagram.raw_trigram_pair).unwrap(),
-            _judgement: raw_hexagram.judgement,
-            _images: raw_hexagram.images,
-            _lines: raw_hexagram.lines,
+            _above: Trigram::default(),
+            _below: Trigram::default(),
         }
     }
 }

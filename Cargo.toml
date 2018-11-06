@@ -4,6 +4,29 @@ version = "0.1.0"
 authors = ["Zelda Hessler <zelda.hessler@gmail.com>"]
 edition = "2018"
 
+[lib]
+# The name of a target is the name of the library that will be generated. This
+# is defaulted to the name of the package or project, with any dashes replaced
+# with underscores. (Rust `extern crate` declarations reference this name;
+# therefore the value must be a valid Rust identifier to be usable.)
+name = "iching"
+# This field points at where the crate is located, relative to the `Cargo.toml`.
+path = "src/lib.rs"
+## A flag for enabling unit tests for this target. This is used by `cargo test`.
+#test = true
+## A flag for enabling documentation tests for this target. This is only relevant
+## for libraries, it has no effect on other sections. This is used by
+## `cargo test`.
+#doctest = true
+## A flag for enabling benchmarks for this target. This is used by `cargo bench`.
+#bench = true
+## A flag for enabling documentation of this target. This is used by `cargo doc`.
+#doc = true
+
+[[bin]]
+name = "iching_cli"
+path = "src/bin/main.rs"
+
 [dependencies]
 clap = "2.32"
 rand = "0.5"
