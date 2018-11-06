@@ -10,6 +10,7 @@ version = "0.1.0"
 [lib]
 name = "iching"
 path = "src/lib.rs
+
 [[bin]]
 name = "iching_cli"
 path = "src/bin/main.rs"
