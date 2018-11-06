@@ -1,10 +1,18 @@
-use rand::distributions::Distribution;
-use rand::distributions::Standard;
-use rand::Rng;
-use std::fmt::Display;
-use std::fmt::Error;
-use std::fmt::Formatter;
+use rand::{
+    distributions::{
+        Distribution,
+        Standard,
+    },
+    Rng,
+};
+use std::fmt::{
+    Display,
+    Error,
+    Formatter,
+};
 
+/// `Line` represents an individual line within a trigram or hexagram. Hexagrams and trigrams can
+/// 'change' into other hexagrams and trigrams based on which lines are marked as 'changing'.
 #[derive(Debug)]
 pub enum Line {
     BrokenChanging,
@@ -14,6 +22,9 @@ pub enum Line {
 }
 
 impl Line {
+    /// `settle` a line with or without 'changes'. Used to fetch a 'before' and after
+    /// 'hexagram' with which to make a prediction of how things will change between
+    /// now and the future.
     pub fn settle(&self, with_change: bool) -> Line {
         use self::Line::*;
         if with_change {
@@ -27,6 +38,16 @@ impl Line {
                 Unbroken | UnbrokenChanging => Unbroken,
             }
         }
+    }
+
+    pub fn print_big(&self) {
+        use crate::symbols::big_line::*;
+        match self {
+            Line::BrokenChanging => print!("{}", BIG_BROKEN_CHANGING),
+            Line::Broken => print!("{}", BIG_BROKEN),
+            Line::Unbroken => print!("{}", BIG_UNBROKEN),
+            Line::UnbrokenChanging => print!("{}", BIG_UNBROKEN_CHANGING),
+        };
     }
 }
 
@@ -58,3 +79,4 @@ impl Distribution<Line> for Standard {
         }
     }
 }
+

@@ -11,11 +11,6 @@ use iching::{
     },
 };
 use serde_derive::Deserialize;
-use std::fmt::{
-    self,
-    Display,
-    Formatter,
-};
 
 pub struct HexagramJson {
     _ordering: HexagramOrdering,
@@ -23,16 +18,19 @@ pub struct HexagramJson {
     _is_initialized: bool,
 }
 
-impl HexagramRepository<HexagramJsonInfo> for HexagramJson {
-    fn get_by_number(&self, number: usize) -> Option<&HexagramJsonInfo> {
+impl HexagramRepository for HexagramJson {
+    fn get_by_number(&self, number: usize) -> Option<&dyn HexagramInfo> {
         if !self._is_initialized {
             panic!("Called 'get_by_number' on an uninitialized HexagramBook. Don't forget to initialize the book first!")
         }
 
-        match number.checked_sub(1) {
-            Some(actual_index) => self._list.get(actual_index),
-            None => None
+        if let Some(actual_index) = number.checked_sub(1) {
+            if let Some(hexagram_info) = self._list.get(actual_index) {
+                return Some(hexagram_info as &dyn HexagramInfo)
+            }
         }
+
+        None
     }
 
     fn get_is_initialized(&self) -> bool {
@@ -154,18 +152,4 @@ impl From<RawHexagramJsonInfo> for HexagramJsonInfo {
 pub struct TrigramUsizePair {
     above: usize,
     below: usize,
-}
-
-impl Display for HexagramJsonInfo {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        writeln!(f, "  {} (No. {})", self.get_symbol(), self.get_number());
-        writeln!(f, "  {} - {}", self.get_chinese_name(), self.get_english_name());
-        writeln!(f);
-        writeln!(f, "  Judgement:");
-        writeln!(f, "{}", self.get_judgement());
-        writeln!(f, "  Images:");
-        writeln!(f, "{}", self.get_images());
-
-        Ok(())
-    }
 }

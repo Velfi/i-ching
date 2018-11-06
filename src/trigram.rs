@@ -3,6 +3,7 @@ use crate::symbols::{
     hexagram::*,
     trigram::*,
 };
+use crate::symbols::big_line::BIG_LINE_SPACER;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -179,6 +180,15 @@ impl Trigram {
             // Per the settling above, this is unreachable
             (_, _, _) => unreachable!()
         }
+    }
+
+    pub fn print_big(&self) {
+        self.0.print_big();
+        print!("{}", BIG_LINE_SPACER);
+        self.1.print_big();
+        print!("{}", BIG_LINE_SPACER);
+        self.2.print_big();
+        print!("{}", BIG_LINE_SPACER);
     }
 }
 

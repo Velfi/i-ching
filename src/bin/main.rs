@@ -11,6 +11,29 @@ use self::hexagram_json::HexagramJson;
 
 mod hexagram_json;
 
+static APP_TITLE: &str = r#"
+8888888        .d8888b.  888      d8b
+  888         d88P  Y88b 888      Y8P
+  888         888    888 888
+  888         888        88888b.  888 88888b.   .d88b.
+  888         888        888 "88b 888 888 '88b d88P'88b
+  888  888888 888    888 888  888 888 888  888 888  888
+  888         Y88b  d88P 888  888 888 888  888 Y88b 888
+8888888        'Y8888P'  888  888 888 888  888  'Y88888
+                                                    888
+                                               Y8b d88P
+                                                'Y88P'
+
+Version"#;
+static APP_DESCRIPTION: &str = r#"
+Ever wish you could know the future? Well now you can!
+Divine the answers to life's greatest mysteries using
+the ancient Chinese method of the I-Ching.
+
+Learn more on Wikipedia:
+https://en.wikipedia.org/wiki/I_Ching
+"#;
+
 fn main() {
     let matches = start_app_and_get_matches();
 
@@ -28,10 +51,10 @@ fn main() {
 }
 
 fn start_app_and_get_matches() -> ArgMatches<'static> {
-    App::new("I-Ching")
-        .version("1.0")
+    App::new(APP_TITLE)
+        .version("0.1")
         .author("Zelda H. <zeldah@pm.me>")
-        .about("Ever wish you could know the future? Well now you can!")
+        .about(APP_DESCRIPTION)
         .arg(Arg::with_name("question")
             .short("q")
             .long("question")
@@ -53,7 +76,7 @@ fn start_app_and_get_matches() -> ArgMatches<'static> {
         .get_matches()
 }
 
-fn print_hexagram_by_number(matches: &ArgMatches, hexagrams: &HexagramJson) {
+fn print_hexagram_by_number(matches: &ArgMatches, hexagrams: &impl HexagramRepository) {
     let hexagram_number_string = matches.value_of("hexagram").unwrap();
     let hexagram_number_result = hexagram_number_string.parse::<usize>();
 
@@ -79,7 +102,7 @@ fn print_trigram_by_number(matches: &ArgMatches) {
     }
 }
 
-fn print_fortune(question: Option<&str>, hexagrams: &HexagramJson) {
+fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
     let new_hexagram = Hexagram::new();
     let hexagram_number_pre_changes = new_hexagram.as_number(false, HexagramOrdering::KingWen);
     let hexagram_number_post_changes = new_hexagram.as_number(true, HexagramOrdering::KingWen);

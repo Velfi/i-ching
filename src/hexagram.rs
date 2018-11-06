@@ -1,3 +1,4 @@
+use crate::symbols::big_line::BIG_LINE_SPACER;
 use crate::trigram::{
     self,
     Trigram,
@@ -42,6 +43,12 @@ impl Hexagram {
 
     pub fn as_trigram_name_pair(&self, with_changes: bool) -> TrigramNamePair {
         (self._above.get_name(with_changes), self._below.get_name(with_changes))
+    }
+
+    pub fn print_big(&self) {
+        print!("{}", BIG_LINE_SPACER);
+        self._above.print_big();
+        self._below.print_big();
     }
 }
 
