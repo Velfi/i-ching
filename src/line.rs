@@ -1,3 +1,9 @@
+use std::fmt::{
+    Display,
+    Error,
+    Formatter,
+};
+
 use rand::{
     distributions::{
         Distribution,
@@ -5,14 +11,9 @@ use rand::{
     },
     Rng,
 };
-use std::fmt::{
-    Display,
-    Error,
-    Formatter,
-};
 
 /// `Line` represents an individual line within a trigram or hexagram. Hexagrams and trigrams can
-/// 'change' into other hexagrams and trigrams based on which lines are marked as 'changing'.
+/// "change" into other hexagrams and trigrams based on which lines are marked as "changing".
 #[derive(Debug)]
 pub enum Line {
     BrokenChanging,
@@ -22,9 +23,9 @@ pub enum Line {
 }
 
 impl Line {
-    /// `settle` a line with or without 'changes'. Used to fetch a 'before' and after
-    /// 'hexagram' with which to make a prediction of how things will change between
-    /// now and the future.
+    /// `settle` a line with or without "changes". Used during divination to get a pre- and
+    /// post-changes hexagram. The "primary" hexagram's meaning can be changed by the "relating"
+    /// hexagram.
     pub fn settle(&self, with_change: bool) -> Line {
         use self::Line::*;
         if with_change {
@@ -40,18 +41,21 @@ impl Line {
         }
     }
 
+    /// Print the `Line` as large ASCII art.
     pub fn print_big(&self) {
         use crate::symbols::big_line::*;
+        use self::Line::*;
         match self {
-            Line::BrokenChanging => print!("{}", BIG_BROKEN_CHANGING),
-            Line::Broken => print!("{}", BIG_BROKEN),
-            Line::Unbroken => print!("{}", BIG_UNBROKEN),
-            Line::UnbrokenChanging => print!("{}", BIG_UNBROKEN_CHANGING),
+            BrokenChanging => print!("{}", BIG_BROKEN_CHANGING),
+            Broken => print!("{}", BIG_BROKEN),
+            Unbroken => print!("{}", BIG_UNBROKEN),
+            UnbrokenChanging => print!("{}", BIG_UNBROKEN_CHANGING),
         };
     }
 }
 
 impl Default for Line {
+    /// Generate a random `Line` that may or may not be "changing".
     fn default() -> Self {
         rand::random()
     }
@@ -59,17 +63,19 @@ impl Default for Line {
 
 impl Display for Line {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        use self::Line::*;
         let line_string = match self {
-            Line::BrokenChanging => "-X-",
-            Line::Broken => "- -",
-            Line::Unbroken => "---",
-            Line::UnbrokenChanging => "-O-",
+            BrokenChanging => "-X-",
+            Broken => "- -",
+            Unbroken => "---",
+            UnbrokenChanging => "-O-",
         };
         write!(f, "{}", line_string)
     }
 }
 
 impl Distribution<Line> for Standard {
+    /// Generate a random `Line` that may or may not be "changing".
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Line {
         match rng.gen_range(6, 10) {
             6 => Line::BrokenChanging,
