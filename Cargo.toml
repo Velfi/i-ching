@@ -5,7 +5,7 @@ edition = "2018"
 license = "MIT/Apache-2.0"
 name = "iching"
 repository = "https://github.com/Velfi/i-ching"
-version = "0.1.0"
+version = "0.2.0"
 categories = ["games"]
 keywords = ["divination", "iching", "fortune"]
 
