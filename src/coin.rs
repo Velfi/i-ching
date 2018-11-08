@@ -4,6 +4,8 @@ use rand::{
     Rng,
 };
 
+/// Represents the possible states of a coin toss.
+/// Used for randomly generating [`Line`](../line/enum.Line.html)s.
 #[derive(Debug)]
 pub enum Coin {
     Heads,

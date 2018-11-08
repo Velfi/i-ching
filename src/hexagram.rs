@@ -1,9 +1,10 @@
-use crate::symbols::big_line::BIG_LINE_SPACER;
-use crate::trigram::{
-    self,
-    Trigram,
-    trigram_name_pair_as_symbol,
-    TrigramNamePair,
+use crate::{
+    line::Line,
+    symbols::big_line::BIG_LINE_SPACER,
+    trigram::{
+        Trigram,
+        TrigramNamePair,
+    },
 };
 
 /// The 64 Hexagrams have several different orderings, the most
@@ -31,7 +32,7 @@ pub struct Hexagram {
 }
 
 impl Hexagram {
-    /// Create a new `Hexagram` from two `Trigram`s. The `Trigram`s are consumed in the process.
+    /// Create a new `Hexagram` from two [`Trigram`](../trigram/struct.Trigram.html)s. The `Trigram`s are consumed in the process.
     pub fn new(above: Trigram, below: Trigram) -> Self {
         Hexagram {
             _above: above,
@@ -39,14 +40,36 @@ impl Hexagram {
         }
     }
 
-    /// Create a new `Hexagram` from random `Trigram`s. An alias for `default()`.
+    /// Create a new `Hexagram` from random [`Trigram`](../trigram/struct.Trigram.html)s. An alias for `default()`.
     pub fn new_random() -> Self {
         Self::default()
     }
 
+    // Generate a new `Hexagram` by using the coin toss method.
+    pub fn from_coin_tosses() -> Self {
+        Hexagram {
+            _above: Trigram::from_coin_tosses(),
+            _below: Trigram::from_coin_tosses(),
+        }
+    }
+
     /// Get a `&str` to a unicode symbol representing the Hexagram.
     pub fn symbol(&self, with_changes: bool) -> &str {
-        trigram_name_pair_as_symbol(&self._as_trigram_name_pair(with_changes))
+        &self._as_trigram_name_pair(with_changes).as_symbol()
+    }
+
+    /// Get a `Vec` of `usize`s representing the positions of lines that are marked as "changing".
+    pub fn get_changing_line_positions(&self) -> Vec<usize> {
+        self.get_lines_as_vec()
+            .iter()
+            .enumerate()
+            .filter_map(|enumerated_line|
+                match enumerated_line {
+                    (index, Line::BrokenChanging) |
+                    (index, Line::UnbrokenChanging) => Some(index),
+                    _ => None,
+                })
+            .collect()
     }
 
     /// Get the number of this `Hexagram` pre- or post-change, according to a given sequence.
@@ -57,11 +80,20 @@ impl Hexagram {
         let trigram_name_pair: TrigramNamePair = self._as_trigram_name_pair(with_changes);
 
         match sequence {
-            KingWen => trigram::king_wen_sequence_number(&trigram_name_pair),
-            Binary => trigram::binary_sequence_number(&trigram_name_pair),
-            Mawangdui => trigram::mawangdui_sequence_number(&trigram_name_pair),
-            EightPalaces => trigram::eight_palaces_sequence_number(&trigram_name_pair),
+            KingWen => trigram_name_pair.king_wen_sequence_number(),
+            Binary => trigram_name_pair.binary_sequence_number(),
+            Mawangdui => trigram_name_pair.mawangdui_sequence_number(),
         }
+    }
+
+    /// Get a vec of this `Hexagram`'s `Line`s *("above" lines followed by "below" lines.)*.
+    /// The lines are cloned.
+    pub fn get_lines_as_vec(&self) -> Vec<Line> {
+        let mut resulting_vec = Vec::new();
+        resulting_vec.extend_from_slice(&self._above.get_lines_as_vec());
+        resulting_vec.extend_from_slice(&self._below.get_lines_as_vec());
+
+        resulting_vec
     }
 
     /// Print the `Hexagram` as large ASCII-art lines.
@@ -74,7 +106,7 @@ impl Hexagram {
     /// A utility function to get a `TrigramNamePair` pre- or post-changes. Mainly used to
     /// interface with utilities in the `trigram` module.
     fn _as_trigram_name_pair(&self, with_changes: bool) -> TrigramNamePair {
-        (self._above.get_name(with_changes), self._below.get_name(with_changes))
+        TrigramNamePair(self._above.get_name(with_changes), self._below.get_name(with_changes))
     }
 }
 

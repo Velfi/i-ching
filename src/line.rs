@@ -12,9 +12,11 @@ use rand::{
     Rng,
 };
 
+use crate::coin::Coin;
+
 /// `Line` represents an individual line within a trigram or hexagram. Hexagrams and trigrams can
 /// "change" into other hexagrams and trigrams based on which lines are marked as "changing".
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Line {
     BrokenChanging,
     Broken,
@@ -38,6 +40,30 @@ impl Line {
                 Broken | BrokenChanging => Broken,
                 Unbroken | UnbrokenChanging => Unbroken,
             }
+        }
+    }
+
+    // Generate a new `Line` by using the coin toss method.
+    pub fn from_coin_tosses() -> Self {
+        let toss_results: [Coin; 3] = [
+            rand::random(),
+            rand::random(),
+            rand::random(),
+        ];
+
+        let toss_total = toss_results
+            .iter()
+            .fold(0usize, |sum, coin| sum + match coin {
+                Coin::Tails => 2,
+                Coin::Heads => 3,
+            });
+
+        match toss_total {
+            6 => Line::BrokenChanging,
+            7 => Line::Broken,
+            8 => Line::Unbroken,
+            9 => Line::UnbrokenChanging,
+            _ => unreachable!()
         }
     }
 

@@ -105,7 +105,7 @@ fn print_trigram_by_number(matches: &ArgMatches) {
 }
 
 fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
-    let new_hexagram = Hexagram::new_random();
+    let new_hexagram = Hexagram::from_coin_tosses();
     let hexagram_number_pre_changes = new_hexagram.as_number(false, HexagramOrdering::KingWen);
     let hexagram_number_post_changes = new_hexagram.as_number(true, HexagramOrdering::KingWen);
 
@@ -121,6 +121,17 @@ fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
     }
 
     print!("{}", hexagram_info_pre_changes);
+
+    let changing_line_positions = new_hexagram.get_changing_line_positions();
+
+    if !changing_line_positions.is_empty() {
+        println!("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        println!("Lines are changing! Consider:");
+        for line_meaning in hexagram_info_pre_changes.get_line_meanings(&changing_line_positions) {
+            print!("\nLine {} changes:\n{}", line_meaning.position, line_meaning.meaning);
+        }
+        println!("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    }
 
     if let Some(hexagram_info) = hexagram_info_post_changes {
         print!("Changes into:\n\n{}", hexagram_info);

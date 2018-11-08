@@ -1,16 +1,17 @@
+use serde_derive::Deserialize;
+
 use iching::{
     hexagram::HexagramOrdering,
     hexagram_repository::{
+        ChangingLineMeaning,
         HexagramInfo,
         HexagramRepository,
-        LineMeaning,
     },
     trigram::{
-        trigram_name_pair_as_symbol,
         TrigramName,
-    },
+        TrigramNamePair
+    }
 };
-use serde_derive::Deserialize;
 
 pub struct HexagramJson {
     _ordering: HexagramOrdering,
@@ -26,7 +27,7 @@ impl HexagramRepository for HexagramJson {
 
         if let Some(actual_index) = number.checked_sub(1) {
             if let Some(hexagram_info) = self._list.get(actual_index) {
-                return Some(hexagram_info as &dyn HexagramInfo)
+                return Some(hexagram_info as &dyn HexagramInfo);
             }
         }
 
@@ -69,13 +70,13 @@ impl Default for HexagramJson {
 
 #[derive(Deserialize)]
 pub struct RawHexagramJsonInfo {
-    number: i32,
+    number: usize,
     name: NameTranslations,
     #[serde(rename = "trigramPair")]
     trigram_usize_pair: TrigramUsizePair,
     judgement: String,
     images: String,
-    lines: Vec<LineMeaning>,
+    lines: Vec<ChangingLineMeaning>,
 }
 
 #[derive(Deserialize)]
@@ -87,9 +88,9 @@ pub struct NameTranslations {
 pub struct HexagramJsonInfo {
     _images: String,
     _judgement: String,
-    _lines: Vec<LineMeaning>,
+    _lines: Vec<ChangingLineMeaning>,
     _name: NameTranslations,
-    _number: i32,
+    _number: usize,
     _trigram_usize_pair: TrigramUsizePair,
 }
 
@@ -98,7 +99,7 @@ impl HexagramInfo for HexagramJsonInfo {
         &self._name.chinese
     }
 
-    fn get_english_name(&self) -> &str {
+    fn get_localized_name(&self) -> &str {
         &self._name.english
     }
 
@@ -110,11 +111,14 @@ impl HexagramInfo for HexagramJsonInfo {
         &self._judgement
     }
 
-    fn get_line_meanings(&self) -> &Vec<LineMeaning> {
-        &self._lines
+    fn get_line_meanings(&self, changing_lines: &[usize]) -> Vec<&ChangingLineMeaning> {
+        self._lines
+            .iter()
+            .filter(|&line_meaning| changing_lines.contains(&line_meaning.position))
+            .collect()
     }
 
-    fn get_number(&self) -> i32 {
+    fn get_number(&self) -> usize {
         self._number
     }
 
@@ -122,16 +126,7 @@ impl HexagramInfo for HexagramJsonInfo {
         let above = TrigramName::from_usize(self._trigram_usize_pair.above).unwrap();
         let below = TrigramName::from_usize(self._trigram_usize_pair.below).unwrap();
 
-        trigram_name_pair_as_symbol(&(above, below))
-    }
-
-    fn get_trigram_above_name(&self) -> TrigramName {
-        // A failed conversion here should be impossible because the JSON is valid.
-        TrigramName::from_usize(self._trigram_usize_pair.above).unwrap()
-    }
-    fn get_trigram_below_name(&self) -> TrigramName {
-        // A failed conversion here should be impossible because the JSON is valid.
-        TrigramName::from_usize(self._trigram_usize_pair.below).unwrap()
+        TrigramNamePair(above, below).as_symbol()
     }
 }
 
