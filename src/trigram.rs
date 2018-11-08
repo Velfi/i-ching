@@ -1,13 +1,14 @@
+use std::error::Error;
+use std::fmt::Display;
+use std::fmt::Formatter;
+use std::ops::Add;
+
 use crate::line::Line;
 use crate::symbols::{
     hexagram::*,
     trigram::*,
 };
 use crate::symbols::big_line::BIG_LINE_SPACER;
-use std::error::Error;
-use std::fmt::Display;
-use std::fmt::Formatter;
-use std::ops::Add;
 
 //#[derive(Deserialize)]
 pub enum TrigramName {
@@ -347,9 +348,6 @@ pub fn king_wen_sequence_number(trigram_name_pair: &TrigramNamePair) -> usize {
 pub fn binary_sequence_number(_trigram_name_pair: &TrigramNamePair) -> usize { unimplemented!() }
 
 pub fn mawangdui_sequence_number(_trigram_name_pair: &TrigramNamePair) -> usize { unimplemented!() }
-
-pub fn eight_palaces_sequence_number(_trigram_name_pair: &TrigramNamePair) -> usize { unimplemented!() }
-
 
 #[derive(Debug)]
 pub enum TrigramError {

@@ -1,6 +1,8 @@
-use rand::distributions::Distribution;
-use rand::distributions::Standard;
-use rand::Rng;
+use rand::{
+    distributions::Distribution,
+    distributions::Standard,
+    Rng,
+};
 
 #[derive(Debug)]
 pub enum Coin {

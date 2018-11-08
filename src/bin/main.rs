@@ -1,4 +1,5 @@
 use clap::{App, Arg, ArgMatches};
+
 use iching::{
     hexagram::{
         Hexagram,
@@ -7,6 +8,7 @@ use iching::{
     hexagram_repository::HexagramRepository,
     trigram::TrigramName,
 };
+
 use self::hexagram_json::HexagramJson;
 
 mod hexagram_json;
@@ -103,7 +105,7 @@ fn print_trigram_by_number(matches: &ArgMatches) {
 }
 
 fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
-    let new_hexagram = Hexagram::new();
+    let new_hexagram = Hexagram::new_random();
     let hexagram_number_pre_changes = new_hexagram.as_number(false, HexagramOrdering::KingWen);
     let hexagram_number_post_changes = new_hexagram.as_number(true, HexagramOrdering::KingWen);
 
