@@ -5,6 +5,7 @@ use iching::{
         Hexagram,
         HexagramOrdering,
     },
+    hexagram_repository::HexagramInfo,
     hexagram_repository::HexagramRepository,
     trigram::TrigramName,
 };
@@ -19,7 +20,7 @@ static APP_TITLE: &str = r#"
   888         888    888 888
   888         888        88888b.  888 88888b.   .d88b.
   888         888        888 "88b 888 888 '88b d88P'88b
-  888  888888 888    888 888  888 888 888  888 888  888
+  888         888    888 888  888 888 888  888 888  888
   888         Y88b  d88P 888  888 888 888  888 Y88b 888
 8888888        'Y8888P'  888  888 888 888  888  'Y88888
                                                     888
@@ -106,34 +107,48 @@ fn print_trigram_by_number(matches: &ArgMatches) {
 
 fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
     let new_hexagram = Hexagram::from_coin_tosses();
-    let hexagram_number_pre_changes = new_hexagram.as_number(false, HexagramOrdering::KingWen);
-    let hexagram_number_post_changes = new_hexagram.as_number(true, HexagramOrdering::KingWen);
 
+    // Get the primary hexagram
+    let hexagram_number_pre_changes = new_hexagram.as_number(false, HexagramOrdering::KingWen);
     let hexagram_info_pre_changes = hexagrams.get_by_number(
         hexagram_number_pre_changes
-    ).expect("Failed to get hexagram info by number (pre)");
+    ).expect(
+        "Failed to get the primary hexagram info by number.\
+        Perhaps there is an issue with the repository?"
+    );
+
+    // Get the relating hexagram (if applicable)
+    let hexagram_number_post_changes = new_hexagram.as_number(true, HexagramOrdering::KingWen);
     let hexagram_info_post_changes = if hexagram_number_pre_changes != hexagram_number_post_changes {
         hexagrams.get_by_number(hexagram_number_post_changes)
     } else { None };
 
+    // If the user provided a question, then print it out
     if let Some(question_text) = question {
         println!("Q: {}", question_text)
     }
 
+    // Print info for the primary hexagram
     print!("{}", hexagram_info_pre_changes);
 
-    let changing_line_positions = new_hexagram.get_changing_line_positions();
+    // Print info for any changing lines
+    print_changing_lines_info(&new_hexagram, hexagram_info_pre_changes);
+
+    // Print info for the relating hexagram (if applicable)
+    if let Some(hexagram_info) = hexagram_info_post_changes {
+        print!("Changes into:\n\n{}", hexagram_info);
+    }
+}
+
+fn print_changing_lines_info(hexagram: &Hexagram, hexagram_info: &HexagramInfo) {
+    let changing_line_positions = hexagram.get_changing_line_positions();
 
     if !changing_line_positions.is_empty() {
         println!("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         println!("Lines are changing! Consider:");
-        for line_meaning in hexagram_info_pre_changes.get_line_meanings(&changing_line_positions) {
+        for line_meaning in hexagram_info.get_line_meanings(&changing_line_positions) {
             print!("\nLine {} changes:\n{}", line_meaning.position, line_meaning.meaning);
         }
         println!("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    }
-
-    if let Some(hexagram_info) = hexagram_info_post_changes {
-        print!("Changes into:\n\n{}", hexagram_info);
     }
 }
