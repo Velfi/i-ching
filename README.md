@@ -1,4 +1,4 @@
-#`iching`
+#iching
 
 This library contains methods for divination using the I Ching and also includes a CLI app
 for making predictions in your terminal. The CLI app was inspired by the original
