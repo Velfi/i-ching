@@ -5,16 +5,25 @@ use iching::{
         Hexagram,
         HexagramOrdering,
     },
-    hexagram_repository::HexagramInfo,
-    hexagram_repository::HexagramRepository,
+    hexagram_repository::{
+        HexagramInfo,
+        HexagramRepository,
+    },
     trigram::TrigramName,
 };
 
+use self::arg_template::{
+    ARG_CAST,
+    ARG_HEXAGRAM,
+    ARG_QUESTION,
+    ARG_TRIGRAM,
+};
 use self::hexagram_json::HexagramJson;
 
 mod hexagram_json;
+mod arg_template;
 
-static APP_TITLE: &str = r#"
+const APP_TITLE: &str = r#"
 8888888        .d8888b.  888      d8b
   888         d88P  Y88b 888      Y8P
   888         888    888 888
@@ -28,13 +37,15 @@ static APP_TITLE: &str = r#"
                                                 'Y88P'
 Version"#;
 
-static APP_DESCRIPTION: &str = r#"
+const APP_DESCRIPTION: &str = r#"
 Ever wish you could know the future? Well now you can!
 Divine the answers to life's greatest mysteries using
 the ancient Chinese method of the I-Ching.
 
 Learn more on Wikipedia:
 https://en.wikipedia.org/wiki/I_Ching
+
+Simply run the app to get a reading. Passing a question with '-q' is optional
 "#;
 
 fn main() {
@@ -43,44 +54,58 @@ fn main() {
     let mut hexagrams = HexagramJson::new();
     hexagrams.initialize().expect("Initialization of hexagrams has failed");
 
-    if matches.is_present("hexagram") {
+    if matches.is_present(ARG_HEXAGRAM.name) {
         print_hexagram_by_number(&matches, &hexagrams);
-    } else if matches.is_present("trigram") {
+    } else if matches.is_present(ARG_TRIGRAM.name) {
         print_trigram_by_number(&matches);
+    } else if matches.is_present(ARG_CAST.name) {
+        print_fortune_from_self_cast(&matches, &hexagrams);
     } else {
-        let user_question = matches.value_of("question");
-        print_fortune(user_question, &hexagrams);
+        print_fortune(
+            matches.value_of(ARG_QUESTION.name),
+            Hexagram::from_coin_tosses(),
+            &hexagrams,
+        );
     }
 }
 
 fn start_app_and_get_matches() -> ArgMatches<'static> {
     App::new(APP_TITLE)
-        .version("0.1")
+        .version("0.3")
         .author("Zelda H. <zeldah@pm.me>")
         .about(APP_DESCRIPTION)
-        .arg(Arg::with_name("question")
-            .short("q")
-            .long("question")
-            .value_name("QUESTION")
-            .help("(A double-quoted string) A question that you wish to answer")
-            .takes_value(true))
-        .arg(Arg::with_name("hexagram")
-            .short("h")
-            .long("hexagram")
-            .value_name("HEXAGRAM NUMBER")
-            .help("(A number 1-64) Look up a hexagram by number (King Wen sequence)")
-            .takes_value(true))
-        .arg(Arg::with_name("trigram")
-            .short("t")
-            .long("trigram")
-            .value_name("TRIGRAM NUMBER")
-            .help("(A number 1-8) Look up a trigram by number")
-            .takes_value(true))
+        .arg(Arg::with_name(ARG_QUESTION.name)
+            .short(ARG_QUESTION.short)
+            .long(ARG_QUESTION.long)
+            .value_name(ARG_QUESTION.value_name)
+            .help(ARG_QUESTION.help)
+            .conflicts_with_all(&[ARG_TRIGRAM.name, ARG_HEXAGRAM.name])
+            .takes_value(ARG_QUESTION.takes_value))
+        .arg(Arg::with_name(ARG_HEXAGRAM.name)
+            .short(ARG_HEXAGRAM.short)
+            .long(ARG_HEXAGRAM.long)
+            .value_name(ARG_HEXAGRAM.value_name)
+            .help(ARG_HEXAGRAM.help)
+            .conflicts_with_all(&[ARG_QUESTION.name, ARG_TRIGRAM.name, ARG_CAST.name])
+            .takes_value(ARG_HEXAGRAM.takes_value))
+        .arg(Arg::with_name(ARG_TRIGRAM.name)
+            .short(ARG_TRIGRAM.short)
+            .long(ARG_TRIGRAM.long)
+            .value_name(ARG_TRIGRAM.value_name)
+            .help(ARG_TRIGRAM.help)
+            .conflicts_with_all(&[ARG_QUESTION.name, ARG_HEXAGRAM.name, ARG_CAST.name])
+            .takes_value(ARG_TRIGRAM.takes_value))
+        .arg(Arg::with_name(ARG_CAST.name)
+            .short(ARG_CAST.short)
+            .long(ARG_CAST.long)
+            .value_name(ARG_CAST.value_name)
+            .help(ARG_CAST.help)
+            .takes_value(ARG_CAST.takes_value))
         .get_matches()
 }
 
 fn print_hexagram_by_number(matches: &ArgMatches, hexagrams: &impl HexagramRepository) {
-    let hexagram_number_string = matches.value_of("hexagram").unwrap();
+    let hexagram_number_string = matches.value_of(ARG_HEXAGRAM).unwrap();
     let hexagram_number_result = hexagram_number_string.parse::<usize>();
 
     match hexagram_number_result {
@@ -93,7 +118,7 @@ fn print_hexagram_by_number(matches: &ArgMatches, hexagrams: &impl HexagramRepos
 }
 
 fn print_trigram_by_number(matches: &ArgMatches) {
-    let trigram_number_string = matches.value_of("trigram").unwrap();
+    let trigram_number_string = matches.value_of(ARG_TRIGRAM).unwrap();
     let trigram_number_result = trigram_number_string.parse::<usize>();
 
     match trigram_number_result {
@@ -105,11 +130,20 @@ fn print_trigram_by_number(matches: &ArgMatches) {
     }
 }
 
-fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
-    let new_hexagram = Hexagram::from_coin_tosses();
+fn print_fortune_from_self_cast(matches: &ArgMatches, hexagrams: &impl HexagramRepository) {
+    // unwrap here is ok because this should only be called after the existence of the value
+    // has already been verified.
+    let digits = matches.value_of(ARG_CAST).unwrap();
+    let user_question = matches.value_of(ARG_QUESTION);
 
+    let hexagram = Hexagram::from_digits_str(digits)
+        .expect(&format!("Failed to create a Hexagram from digits string: {}", digits));
+    print_fortune(user_question, hexagram, hexagrams);
+}
+
+fn print_fortune(question: Option<&str>, hexagram: Hexagram, hexagrams: &impl HexagramRepository) {
     // Get the primary hexagram
-    let hexagram_number_pre_changes = new_hexagram.as_number(false, HexagramOrdering::KingWen);
+    let hexagram_number_pre_changes = hexagram.as_number(false, HexagramOrdering::KingWen);
     let hexagram_info_pre_changes = hexagrams.get_by_number(
         hexagram_number_pre_changes
     ).expect(
@@ -118,21 +152,21 @@ fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
     );
 
     // Get the relating hexagram (if applicable)
-    let hexagram_number_post_changes = new_hexagram.as_number(true, HexagramOrdering::KingWen);
+    let hexagram_number_post_changes = hexagram.as_number(true, HexagramOrdering::KingWen);
     let hexagram_info_post_changes = if hexagram_number_pre_changes != hexagram_number_post_changes {
         hexagrams.get_by_number(hexagram_number_post_changes)
     } else { None };
 
     // If the user provided a question, then print it out
     if let Some(question_text) = question {
-        println!("Q: {}", question_text)
+        println!("Q: {}\n", question_text)
     }
 
     // Print info for the primary hexagram
     print!("{}", hexagram_info_pre_changes);
 
     // Print info for any changing lines
-    print_changing_lines_info(&new_hexagram, hexagram_info_pre_changes);
+    print_changing_lines_info(&hexagram, hexagram_info_pre_changes);
 
     // Print info for the relating hexagram (if applicable)
     if let Some(hexagram_info) = hexagram_info_post_changes {
@@ -140,7 +174,7 @@ fn print_fortune(question: Option<&str>, hexagrams: &impl HexagramRepository) {
     }
 }
 
-fn print_changing_lines_info(hexagram: &Hexagram, hexagram_info: &HexagramInfo) {
+fn print_changing_lines_info(hexagram: &Hexagram, hexagram_info: &dyn HexagramInfo) {
     let changing_line_positions = hexagram.get_changing_line_positions();
 
     if !changing_line_positions.is_empty() {

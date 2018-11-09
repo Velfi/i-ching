@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{
     line::Line,
     symbols::big_line::BIG_LINE_SPACER,
@@ -45,7 +47,28 @@ impl Hexagram {
         Self::default()
     }
 
-    // Generate a new `Hexagram` by using the coin toss method.
+    pub fn from_digits_str(digits: &str) -> Option<Self> {
+        if digits.len() != 6 { return None; };
+
+        let mut trigrams = digits.chars()
+            .map(|digit_char: char| digit_char.to_digit(10))
+            .map(|digit_option: Option<u32>| digit_option.unwrap())
+            .tuples::<(_, _, _)>()
+            .map(|triple|
+                Trigram(
+                    Line::from_usize(triple.0 as usize),
+                    Line::from_usize(triple.1 as usize),
+                    Line::from_usize(triple.2 as usize),
+                )
+            );
+
+        Some(Hexagram {
+            _above: trigrams.next().unwrap(),
+            _below: trigrams.next().unwrap(),
+        })
+    }
+
+    /// Generate a new `Hexagram` by using the coin toss method.
     pub fn from_coin_tosses() -> Self {
         Hexagram {
             _above: Trigram::from_coin_tosses(),
@@ -108,6 +131,10 @@ impl Hexagram {
     fn _as_trigram_name_pair(&self, with_changes: bool) -> TrigramNamePair {
         TrigramNamePair(self._above.get_name(with_changes), self._below.get_name(with_changes))
     }
+//
+//    fn _validate_digits_string(digits: &str) -> bool {
+//
+//    }
 }
 
 impl Default for Hexagram {

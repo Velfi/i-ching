@@ -6,17 +6,19 @@ use std::{
 
 use serde_derive::Deserialize;
 
-use crate::line::Line;
-use crate::symbols::{
-    hexagram::*,
-    trigram::*,
+use crate::{
+    line::Line,
+    symbols::{
+        hexagram::*,
+        trigram::*,
+    }
 };
 
 /// A `Trigram` is a tuple of three [`Line`](../line/enum.Line.html)s. It can be converted into
 /// a [`TrigramName`](enum.TrigramName.html) by calling `get_name()` on it. This is the building
 /// block of a [`Hexagram`](../hexagram/struct.Hexagram.html).
 #[derive(Clone, Debug)]
-pub struct Trigram(Line, Line, Line);
+pub struct Trigram(pub Line, pub Line, pub Line);
 
 impl Trigram {
     /// Get a `TrigramName` from a `Trigram` with or without changes.

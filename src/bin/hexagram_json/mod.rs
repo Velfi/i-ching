@@ -19,6 +19,12 @@ pub struct HexagramJson {
     _is_initialized: bool,
 }
 
+impl HexagramJson {
+    pub fn new() -> Self {
+        HexagramJson::default()
+    }
+}
+
 impl HexagramRepository for HexagramJson {
     fn get_by_number(&self, number: usize) -> Option<&dyn HexagramInfo> {
         if !self._is_initialized {
@@ -51,10 +57,6 @@ impl HexagramRepository for HexagramJson {
         self._list = raw_hexagram_json.into_iter().map(|raw_hexagram_json| raw_hexagram_json.into()).collect();
         self._is_initialized = true;
         Ok(())
-    }
-
-    fn new() -> Self {
-        HexagramJson::default()
     }
 }
 

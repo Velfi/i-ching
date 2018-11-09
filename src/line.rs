@@ -25,24 +25,15 @@ pub enum Line {
 }
 
 impl Line {
-    /// `settle` a line with or without "changes". Used during divination to get a pre- and
-    /// post-changes hexagram. The "primary" hexagram's meaning can be changed by the "relating"
-    /// hexagram.
-    pub fn settle(&self, with_change: bool) -> Line {
-        use self::Line::*;
-        if with_change {
-            match self {
-                Broken | UnbrokenChanging => Broken,
-                Unbroken | BrokenChanging => Unbroken,
-            }
-        } else {
-            match self {
-                Broken | BrokenChanging => Broken,
-                Unbroken | UnbrokenChanging => Unbroken,
-            }
+    pub fn from_usize(n: usize) -> Self {
+        match n {
+            6 => Line::BrokenChanging,
+            7 => Line::Broken,
+            8 => Line::Unbroken,
+            9 => Line::UnbrokenChanging,
+            _ => unreachable!()
         }
     }
-
     // Generate a new `Line` by using the coin toss method.
     pub fn from_coin_tosses() -> Self {
         let toss_results: [Coin; 3] = [
@@ -64,6 +55,24 @@ impl Line {
             8 => Line::Unbroken,
             9 => Line::UnbrokenChanging,
             _ => unreachable!()
+        }
+    }
+
+    /// `settle` a line with or without "changes". Used during divination to get a pre- and
+    /// post-changes hexagram. The "primary" hexagram's meaning can be changed by the "relating"
+    /// hexagram.
+    pub fn settle(&self, with_change: bool) -> Line {
+        use self::Line::*;
+        if with_change {
+            match self {
+                Broken | UnbrokenChanging => Broken,
+                Unbroken | BrokenChanging => Unbroken,
+            }
+        } else {
+            match self {
+                Broken | BrokenChanging => Broken,
+                Unbroken | UnbrokenChanging => Unbroken,
+            }
         }
     }
 

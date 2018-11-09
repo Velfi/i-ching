@@ -32,8 +32,6 @@ pub trait HexagramRepository {
     /// Do anything necessary to initialize this repository. Returns an empty `Result`
     /// if successful and returns a boxed error otherwise.
     fn initialize(&mut self) -> Result<(), Box<Error>>;
-    /// Create a new, uninitialized repository.
-    fn new() -> Self;
 }
 
 /// Associates the meaning of a changing line with the position of a changing line in a hexagram.
@@ -68,7 +66,7 @@ pub trait HexagramInfo {
 impl Display for &dyn HexagramInfo {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         writeln!(f, "  {} (No. {})", self.get_symbol(), self.get_number());
-        writeln!(f, "  {} - {}", self.get_chinese_name(), self.get_localized_name());
+        writeln!(f, "{} - {}", self.get_chinese_name(), self.get_localized_name());
         writeln!(f);
         writeln!(f, "  Judgement:");
         writeln!(f, "{}", self.get_judgement());
