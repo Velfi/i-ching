@@ -1,4 +1,7 @@
-use clap::{App, Arg, ArgMatches};
+use clap::{
+    App,
+    ArgMatches,
+};
 
 use iching::{
     hexagram::{
@@ -12,16 +15,18 @@ use iching::{
     trigram::TrigramName,
 };
 
-use self::arg_template::{
-    ARG_CAST,
-    ARG_HEXAGRAM,
-    ARG_QUESTION,
-    ARG_TRIGRAM,
+use self::{
+    args::{
+        cast,
+        hexagram,
+        question,
+        trigram,
+    },
+    hexagram_json::HexagramJson,
 };
-use self::hexagram_json::HexagramJson;
 
 mod hexagram_json;
-mod arg_template;
+mod args;
 
 const APP_TITLE: &str = r#"
 8888888        .d8888b.  888      d8b
@@ -54,15 +59,15 @@ fn main() {
     let mut hexagrams = HexagramJson::new();
     hexagrams.initialize().expect("Initialization of hexagrams has failed");
 
-    if matches.is_present(ARG_HEXAGRAM.name) {
+    if matches.is_present(args::hexagram::NAME) {
         print_hexagram_by_number(&matches, &hexagrams);
-    } else if matches.is_present(ARG_TRIGRAM.name) {
+    } else if matches.is_present(args::trigram::NAME) {
         print_trigram_by_number(&matches);
-    } else if matches.is_present(ARG_CAST.name) {
+    } else if matches.is_present(args::cast::NAME) {
         print_fortune_from_self_cast(&matches, &hexagrams);
     } else {
         print_fortune(
-            matches.value_of(ARG_QUESTION.name),
+            matches.value_of(args::question::NAME),
             Hexagram::from_coin_tosses(),
             &hexagrams,
         );
@@ -71,41 +76,18 @@ fn main() {
 
 fn start_app_and_get_matches() -> ArgMatches<'static> {
     App::new(APP_TITLE)
-        .version("0.3")
-        .author("Zelda H. <zeldah@pm.me>")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author(env!("CARGO_PKG_AUTHORS"))
         .about(APP_DESCRIPTION)
-        .arg(Arg::with_name(ARG_QUESTION.name)
-            .short(ARG_QUESTION.short)
-            .long(ARG_QUESTION.long)
-            .value_name(ARG_QUESTION.value_name)
-            .help(ARG_QUESTION.help)
-            .conflicts_with_all(&[ARG_TRIGRAM.name, ARG_HEXAGRAM.name])
-            .takes_value(ARG_QUESTION.takes_value))
-        .arg(Arg::with_name(ARG_HEXAGRAM.name)
-            .short(ARG_HEXAGRAM.short)
-            .long(ARG_HEXAGRAM.long)
-            .value_name(ARG_HEXAGRAM.value_name)
-            .help(ARG_HEXAGRAM.help)
-            .conflicts_with_all(&[ARG_QUESTION.name, ARG_TRIGRAM.name, ARG_CAST.name])
-            .takes_value(ARG_HEXAGRAM.takes_value))
-        .arg(Arg::with_name(ARG_TRIGRAM.name)
-            .short(ARG_TRIGRAM.short)
-            .long(ARG_TRIGRAM.long)
-            .value_name(ARG_TRIGRAM.value_name)
-            .help(ARG_TRIGRAM.help)
-            .conflicts_with_all(&[ARG_QUESTION.name, ARG_HEXAGRAM.name, ARG_CAST.name])
-            .takes_value(ARG_TRIGRAM.takes_value))
-        .arg(Arg::with_name(ARG_CAST.name)
-            .short(ARG_CAST.short)
-            .long(ARG_CAST.long)
-            .value_name(ARG_CAST.value_name)
-            .help(ARG_CAST.help)
-            .takes_value(ARG_CAST.takes_value))
+        .arg(question::declare_arg())
+        .arg(hexagram::declare_arg())
+        .arg(trigram::declare_arg())
+        .arg(cast::declare_arg())
         .get_matches()
 }
 
 fn print_hexagram_by_number(matches: &ArgMatches, hexagrams: &impl HexagramRepository) {
-    let hexagram_number_string = matches.value_of(ARG_HEXAGRAM).unwrap();
+    let hexagram_number_string = matches.value_of(args::hexagram::NAME).unwrap();
     let hexagram_number_result = hexagram_number_string.parse::<usize>();
 
     match hexagram_number_result {
@@ -118,7 +100,7 @@ fn print_hexagram_by_number(matches: &ArgMatches, hexagrams: &impl HexagramRepos
 }
 
 fn print_trigram_by_number(matches: &ArgMatches) {
-    let trigram_number_string = matches.value_of(ARG_TRIGRAM).unwrap();
+    let trigram_number_string = matches.value_of(args::trigram::NAME).unwrap();
     let trigram_number_result = trigram_number_string.parse::<usize>();
 
     match trigram_number_result {
@@ -133,8 +115,8 @@ fn print_trigram_by_number(matches: &ArgMatches) {
 fn print_fortune_from_self_cast(matches: &ArgMatches, hexagrams: &impl HexagramRepository) {
     // unwrap here is ok because this should only be called after the existence of the value
     // has already been verified.
-    let digits = matches.value_of(ARG_CAST).unwrap();
-    let user_question = matches.value_of(ARG_QUESTION);
+    let digits = matches.value_of(args::cast::NAME).unwrap();
+    let user_question = matches.value_of(args::question::NAME);
 
     let hexagram = Hexagram::from_digits_str(digits)
         .expect(&format!("Failed to create a Hexagram from digits string: {}", digits));
