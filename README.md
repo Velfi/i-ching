@@ -24,6 +24,7 @@ iching --help
 This project is a work in progress. If you find any issues, please submit them through Github.
 ## A simplified example:
 ```rust
+fn main() {
    // Implementing the HexagramRepository trait is the most complex
    // aspect of using this library. See the included CLI app for an
    // example implementation called HexagramJson.
@@ -45,4 +46,5 @@ This project is a work in progress. If you find any issues, please submit them t
                                 
    // Print the hexagram info for the user
    print!("{}", hexagram_info);
+}
 ```
