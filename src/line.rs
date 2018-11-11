@@ -116,7 +116,8 @@ impl Distribution<Line> for Standard {
             6 => Line::BrokenChanging,
             7 => Line::Broken,
             8 => Line::Unbroken,
-            _ => Line::UnbrokenChanging,
+            9 => Line::UnbrokenChanging,
+            _ => unreachable!(),
         }
     }
 }

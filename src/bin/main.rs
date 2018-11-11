@@ -2,6 +2,7 @@ use clap::{
     App,
     ArgMatches,
 };
+use clap::AppSettings;
 
 use iching::{
     hexagram::{
@@ -50,7 +51,7 @@ the ancient Chinese method of the I-Ching.
 Learn more on Wikipedia:
 https://en.wikipedia.org/wiki/I_Ching
 
-Simply run the app to get a reading. Passing a question with '-q' is optional
+Simply run the app to get a reading. Passing a question with '-q' is optional.
 "#;
 
 fn main() {
@@ -79,6 +80,7 @@ fn start_app_and_get_matches() -> ArgMatches<'static> {
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(APP_DESCRIPTION)
+        .setting(AppSettings::ColoredHelp)
         .arg(question::declare_arg())
         .arg(hexagram::declare_arg())
         .arg(trigram::declare_arg())
@@ -118,13 +120,15 @@ fn print_fortune_from_self_cast(matches: &ArgMatches, hexagrams: &impl HexagramR
     let digits = matches.value_of(args::cast::NAME).unwrap();
     let user_question = matches.value_of(args::question::NAME);
 
+    // Create a hexagram from the passed in digits. panic if they are invalid.
     let hexagram = Hexagram::from_digits_str(digits)
         .expect(&format!("Failed to create a Hexagram from digits string: {}", digits));
+
     print_fortune(user_question, hexagram, hexagrams);
 }
 
 fn print_fortune(question: Option<&str>, hexagram: Hexagram, hexagrams: &impl HexagramRepository) {
-    // Get the primary hexagram
+    // Get the primary hexagram. panic if the repository doesn't contain the hexagram.
     let hexagram_number_pre_changes = hexagram.as_number(false, HexagramOrdering::KingWen);
     let hexagram_info_pre_changes = hexagrams.get_by_number(
         hexagram_number_pre_changes
@@ -133,7 +137,7 @@ fn print_fortune(question: Option<&str>, hexagram: Hexagram, hexagrams: &impl He
         Perhaps there is an issue with the repository?"
     );
 
-    // Get the relating hexagram (if applicable)
+    // Get the relating hexagram, if any lines in the primary hexagram are changing.
     let hexagram_number_post_changes = hexagram.as_number(true, HexagramOrdering::KingWen);
     let hexagram_info_post_changes = if hexagram_number_pre_changes != hexagram_number_post_changes {
         hexagrams.get_by_number(hexagram_number_post_changes)
@@ -157,11 +161,14 @@ fn print_fortune(question: Option<&str>, hexagram: Hexagram, hexagrams: &impl He
 }
 
 fn print_changing_lines_info(hexagram: &Hexagram, hexagram_info: &dyn HexagramInfo) {
+    // Get a list of changing lines by their positions.
     let changing_line_positions = hexagram.get_changing_line_positions();
 
+    // If there are no changing lines, return.
     if !changing_line_positions.is_empty() {
         println!("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         println!("Lines are changing! Consider:");
+        // Else, print out the changing line meanings.
         for line_meaning in hexagram_info.get_line_meanings(&changing_line_positions) {
             print!("\nLine {} changes:\n{}", line_meaning.position, line_meaning.meaning);
         }

@@ -18,7 +18,7 @@ name = "iching"
 path = "src/bin/main.rs"
 
 [dependencies]
-clap = "2.32"
+clap = { version = "2.32", features = ["color"] }
 itertools = "0.7"
 rand = "0.5"
 serde = "1.0"

@@ -17,7 +17,9 @@ To install this crate as a CLI app, just run
 ```
 cargo install iching
 ```
-Once installed, you can access the CLI help screen like this:
+*This assumes that you have Rust installed on your machine.*
+
+Once installed, you can access the help screen with the `--help` flag:
 ```
 iching --help
 ```

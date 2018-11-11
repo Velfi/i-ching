@@ -1,6 +1,13 @@
 use clap::Arg;
 
-pub const HELP: &str = "(A number 1-8) Look up a trigram by number";
+use crate::args::{
+    cast, hexagram, question,
+};
+
+pub const HELP: &str = "(A number 1-8){n}Look up a trigram by number.{n} ";
+pub const LONG_HELP: &str = "\
+Look up a trigram by number.{n}
+example:{n}iching -t 6{n} ";
 pub const LONG: &str = NAME;
 pub const NAME: &str = "trigram";
 pub const SHORT: &str = "t";
@@ -13,6 +20,7 @@ pub fn declare_arg<'a, 'b>() -> Arg<'a, 'b> {
         .long(LONG)
         .value_name(VALUE_NAME)
         .help(HELP)
-//        .conflicts_with_all(&[ARG_QUESTION.name, ARG_HEXAGRAM.name, ARG_CAST.name])
+        .long_help(LONG_HELP)
+        .conflicts_with_all(&[question::NAME, hexagram::NAME, cast::NAME])
         .takes_value(TAKES_VALUE)
 }
