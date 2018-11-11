@@ -7,7 +7,7 @@ edition = "2018"
 keywords = ["divination", "iching", "fortune"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/Velfi/i-ching"
-version = "0.2.0"
+version = "0.3.0"
 
 [lib]
 name = "iching"
