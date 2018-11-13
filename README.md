@@ -2,10 +2,10 @@
 
 [![Crates.io][crates-badge]][crates-link] [![Documentation][docs-badge]][docs-link] [![MIT/Apache][license-badge]][license-link] ![Lines of Code][loc-badge]
 
-[crates-badge]: https://img.shields.io/crates/v/iching.svg
-[docs-badge]: https://docs.rs/iching/badge.svg
+[crates-badge]: https://img.shields.io/crates/v/iching.svg?maxAge=86400
+[docs-badge]: https://docs.rs/iching/badge.svg?maxAge=86400
 [docs-link]: https://docs.rs/iching/
-[license-badge]: https://img.shields.io/badge/license-MIT%2FApache-blue.svg
+[license-badge]: https://img.shields.io/badge/license-MIT%2FApache-blue.svg?maxAge=86400
 [loc-badge]: https://tokei.rs/b1/github/velfi/i-ching?category=code
 [crates-link]: https://crates.io/crates/iching/
 [license-link]: COPYING
