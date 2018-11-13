@@ -324,7 +324,7 @@ impl TrigramNamePair {
         }
     }
 
-    /// Get the number of the `TrigramNamePair` according to the [King Wen Sequence]().
+    /// Get the number of the `TrigramNamePair` according to the King Wen Sequence.
     pub fn king_wen_sequence_number(&self) -> usize {
         use self::TrigramName::*;
         match self {
