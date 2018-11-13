@@ -1,4 +1,14 @@
-# `iching`
+# iching
+
+[![Crates.io][crates-badge]][crates-link] [![Documentation][docs-badge]][docs-link] [![MIT/Apache][license-badge]][license-link] ![Lines of Code][loc-badge]
+
+[crates-badge]: https://img.shields.io/crates/v/iching.svg
+[docs-badge]: https://docs.rs/iching/badge.svg
+[docs-link]: https://docs.rs/iching/
+[license-badge]: https://img.shields.io/badge/license-MIT%2FApache-blue.svg
+[loc-badge]: https://tokei.rs/b1/github/velfi/i-ching?category=code
+[crates-link]: https://crates.io/crates/iching/
+[license-link]: COPYING
 
 This library contains methods for divination using the I Ching and also includes a CLI app
 for making predictions in your terminal. The CLI app was inspired by the original
@@ -12,7 +22,7 @@ contained in the I Ching book.
 You can find lots of great information on the 2000+ year history of the I Ching on
 [Wikipedia](https://en.wikipedia.org/wiki/I_Ching)
 
-## Installation
+## Using the CLI app
 To install this crate as a CLI app, just run
 ```
 cargo install iching
@@ -24,7 +34,7 @@ Once installed, you can access the help screen with the `--help` flag:
 iching --help
 ```
 This project is a work in progress. If you find any issues, please submit them through Github.
-## A simplified example:
+## Using the crate
 ```rust
 fn main() {
    // Implementing the HexagramRepository trait is the most complex
@@ -46,7 +56,18 @@ fn main() {
    let hexagram_info = hexagrams.get_by_number(hexagram_number)
                                 .expect("Failed to get hexagram info by number (pre)");
                                 
-   // Print the hexagram info for the user
+   // Print the hexagram info
    print!("{}", hexagram_info);
 }
 ```
+
+## License
+iching is free and open source software distributed under the terms of both
+the [MIT License][mit-license] and the [Apache License 2.0][apache-license].
+
+[mit-license]: license/LICENSE-MIT
+[apache-license]: license/LICENSE-APACHE
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
+dual licensed as above, without any additional terms or conditions.
