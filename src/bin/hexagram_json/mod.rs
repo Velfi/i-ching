@@ -2,15 +2,8 @@ use serde_derive::Deserialize;
 
 use iching::{
     hexagram::HexagramOrdering,
-    hexagram_repository::{
-        ChangingLineMeaning,
-        HexagramInfo,
-        HexagramRepository,
-    },
-    trigram::{
-        TrigramName,
-        TrigramNamePair
-    }
+    hexagram_repository::{ChangingLineMeaning, HexagramInfo, HexagramRepository},
+    trigram::{TrigramName, TrigramNamePair},
 };
 
 pub struct HexagramJson {
@@ -54,7 +47,10 @@ impl HexagramRepository for HexagramJson {
     fn initialize(&mut self) -> Result<(), Box<std::error::Error>> {
         let json_file = include_str!("hexagrams.json");
         let raw_hexagram_json: Vec<RawHexagramJsonInfo> = serde_json::from_str(&json_file)?;
-        self._list = raw_hexagram_json.into_iter().map(|raw_hexagram_json| raw_hexagram_json.into()).collect();
+        self._list = raw_hexagram_json
+            .into_iter()
+            .map(|raw_hexagram_json| raw_hexagram_json.into())
+            .collect();
         self._is_initialized = true;
         Ok(())
     }

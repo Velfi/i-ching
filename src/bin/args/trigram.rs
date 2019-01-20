@@ -1,8 +1,6 @@
 use clap::Arg;
 
-use crate::args::{
-    cast, hexagram, question,
-};
+use crate::args::{cast, hexagram, question};
 
 pub const HELP: &str = "(A number 1-8){n}Look up a trigram by number.{n} ";
 pub const LONG_HELP: &str = "\

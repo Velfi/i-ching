@@ -1,10 +1,6 @@
 use std::{
     error::Error,
-    fmt::{
-        self,
-        Display,
-        Formatter,
-    },
+    fmt::{self, Display, Formatter},
 };
 
 use serde_derive::Deserialize;
@@ -65,13 +61,18 @@ pub trait HexagramInfo {
 
 impl Display for &dyn HexagramInfo {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        writeln!(f, "  {} (No. {})", self.get_symbol(), self.get_number());
-        writeln!(f, "{} - {}", self.get_chinese_name(), self.get_localized_name());
-        writeln!(f);
-        writeln!(f, "  Judgement:");
-        writeln!(f, "{}", self.get_judgement());
-        writeln!(f, "  Images:");
-        writeln!(f, "{}", self.get_images());
+        writeln!(f, "  {} (No. {})", self.get_symbol(), self.get_number())?;
+        writeln!(
+            f,
+            "{} - {}",
+            self.get_chinese_name(),
+            self.get_localized_name()
+        )?;
+        writeln!(f)?;
+        writeln!(f, "  Judgement:")?;
+        writeln!(f, "{}", self.get_judgement())?;
+        writeln!(f, "  Images:")?;
+        writeln!(f, "{}", self.get_images())?;
 
         Ok(())
     }

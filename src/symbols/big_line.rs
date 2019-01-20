@@ -31,16 +31,5 @@ pub static BIG_UNBROKEN_CHANGING: &str = "\
                            ▔▀▀▀▀▀▔                           \n\
 ";
 pub static BIG_LINE_SPACER: &str = "\
-                                                                        \n\
-";
-
-
-
-
-
-
-
-
-
-
-
+                                    \n\
+                                    ";

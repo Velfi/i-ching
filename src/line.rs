@@ -1,14 +1,7 @@
-use std::fmt::{
-    Display,
-    Error,
-    Formatter,
-};
+use std::fmt::{Display, Error, Formatter};
 
 use rand::{
-    distributions::{
-        Distribution,
-        Standard,
-    },
+    distributions::{Distribution, Standard},
     Rng,
 };
 
@@ -31,30 +24,26 @@ impl Line {
             7 => Line::Broken,
             8 => Line::Unbroken,
             9 => Line::UnbrokenChanging,
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
     // Generate a new `Line` by using the coin toss method.
     pub fn from_coin_tosses() -> Self {
-        let toss_results: [Coin; 3] = [
-            rand::random(),
-            rand::random(),
-            rand::random(),
-        ];
+        let toss_results: [Coin; 3] = [rand::random(), rand::random(), rand::random()];
 
-        let toss_total = toss_results
-            .iter()
-            .fold(0usize, |sum, coin| sum + match coin {
+        let toss_total = toss_results.iter().fold(0usize, |sum, coin| {
+            sum + match coin {
                 Coin::Tails => 2,
                 Coin::Heads => 3,
-            });
+            }
+        });
 
         match toss_total {
             6 => Line::BrokenChanging,
             7 => Line::Broken,
             8 => Line::Unbroken,
             9 => Line::UnbrokenChanging,
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 
@@ -78,8 +67,8 @@ impl Line {
 
     /// Print the `Line` as large ASCII art.
     pub fn print_big(&self) {
-        use crate::symbols::big_line::*;
         use self::Line::*;
+        use crate::symbols::big_line::*;
         match self {
             BrokenChanging => print!("{}", BIG_BROKEN_CHANGING),
             Broken => print!("{}", BIG_BROKEN),
@@ -121,4 +110,3 @@ impl Distribution<Line> for Standard {
         }
     }
 }
-

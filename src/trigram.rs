@@ -1,17 +1,10 @@
-use std::{
-    error::Error,
-    fmt::Display,
-    fmt::Formatter,
-};
+use std::{error::Error, fmt::Display, fmt::Formatter};
 
 use serde_derive::Deserialize;
 
 use crate::{
     line::Line,
-    symbols::{
-        hexagram::*,
-        trigram::*,
-    }
+    symbols::{hexagram::*, trigram::*},
 };
 
 /// A `Trigram` is a tuple of three [`Line`](../line/enum.Line.html)s. It can be converted into
@@ -31,26 +24,22 @@ impl Trigram {
         let l3 = self.2.settle(with_changes);
 
         match (l1, l2, l3) {
-            (Unbroken, Unbroken, Unbroken) => Qian,// "☰",
-            (Broken, Broken, Broken) => Kun,// "☷",
-            (Broken, Broken, Unbroken) => Zhen,// "☳",
-            (Broken, Unbroken, Broken) => Kan,// "☵",
-            (Unbroken, Broken, Broken) => Gen,// "☶",
-            (Unbroken, Unbroken, Broken) => Xun,// "☴",
-            (Unbroken, Broken, Unbroken) => Li,// "☲",
-            (Broken, Unbroken, Unbroken) => Dui,// "☱",
+            (Unbroken, Unbroken, Unbroken) => Qian, // "☰",
+            (Broken, Broken, Broken) => Kun,        // "☷",
+            (Broken, Broken, Unbroken) => Zhen,     // "☳",
+            (Broken, Unbroken, Broken) => Kan,      // "☵",
+            (Unbroken, Broken, Broken) => Gen,      // "☶",
+            (Unbroken, Unbroken, Broken) => Xun,    // "☴",
+            (Unbroken, Broken, Unbroken) => Li,     // "☲",
+            (Broken, Unbroken, Unbroken) => Dui,    // "☱",
             // Per the "settling" above, this is unreachable
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 
     /// Get this `Trigram`'s `Line`s. The lines are cloned.
     pub fn get_lines_as_vec(&self) -> Vec<Line> {
-        vec![
-            self.0.clone(),
-            self.1.clone(),
-            self.2.clone(),
-        ]
+        vec![self.0.clone(), self.1.clone(), self.2.clone()]
     }
 
     /// Print the `Trigram` as large ASCII-art lines.
@@ -77,11 +66,7 @@ impl Trigram {
 
 impl Default for Trigram {
     fn default() -> Self {
-        Trigram(
-            rand::random(),
-            rand::random(),
-            rand::random(),
-        )
+        Trigram(rand::random(), rand::random(), rand::random())
     }
 }
 
@@ -209,7 +194,7 @@ impl TrigramName {
             6 => Ok(Kan),
             7 => Ok(Gen),
             8 => Ok(Kun),
-            _ => Err(TrigramError::IntegerOutOfRange)
+            _ => Err(TrigramError::IntegerOutOfRange),
         }
     }
 
@@ -230,13 +215,13 @@ impl TrigramName {
 }
 
 impl Display for TrigramName {
-    fn fmt(&self, f: &mut Formatter<>) -> Result<(), std::fmt::Error> {
-        writeln!(f, "{} (No. {})", self.symbol(), self.number());
-        writeln!(f, "{} - {}", self.romanized(), self.english_translation());
-        writeln!(f);
-        writeln!(f, "Attribute: {}", self.attribute());
-        writeln!(f, "Image in nature: {}", self.image());
-        writeln!(f, "Family Relationship: {}", self.family_relationship());
+    fn fmt(&self, f: &mut Formatter) -> Result<(), std::fmt::Error> {
+        writeln!(f, "{} (No. {})", self.symbol(), self.number())?;
+        writeln!(f, "{} - {}", self.romanized(), self.english_translation())?;
+        writeln!(f)?;
+        writeln!(f, "Attribute: {}", self.attribute())?;
+        writeln!(f, "Image in nature: {}", self.image())?;
+        writeln!(f, "Family Relationship: {}", self.family_relationship())?;
 
         Ok(())
     }
@@ -397,11 +382,15 @@ impl TrigramNamePair {
 
     /// Get the number of the `TrigramNamePair` according to the [Binary Sequence](https://en.wikipedia.org/wiki/Bagua#Fu_Xi_%22Earlier_Heaven%22).
     /// **currently unimplemented!**
-    pub fn binary_sequence_number(&self) -> usize { unimplemented!() }
+    pub fn binary_sequence_number(&self) -> usize {
+        unimplemented!()
+    }
 
     /// Get the number of the `TrigramNamePair` according to the [Mawangdui Sequence](https://en.wikipedia.org/wiki/Mawangdui).
     /// **currently unimplemented!**
-    pub fn mawangdui_sequence_number(&self) -> usize { unimplemented!() }
+    pub fn mawangdui_sequence_number(&self) -> usize {
+        unimplemented!()
+    }
 }
 
 /// Errors related to `Trigram`s.

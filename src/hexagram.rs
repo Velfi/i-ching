@@ -3,10 +3,7 @@ use itertools::Itertools;
 use crate::{
     line::Line,
     symbols::big_line::BIG_LINE_SPACER,
-    trigram::{
-        Trigram,
-        TrigramNamePair,
-    },
+    trigram::{Trigram, TrigramNamePair},
 };
 
 /// The 64 Hexagrams have several different orderings, the most
@@ -48,19 +45,22 @@ impl Hexagram {
     }
 
     pub fn from_digits_str(digits: &str) -> Option<Self> {
-        if digits.len() != 6 { return None; };
+        if digits.len() != 6 {
+            return None;
+        };
 
-        let mut trigrams = digits.chars()
+        let mut trigrams = digits
+            .chars()
             .map(|digit_char: char| digit_char.to_digit(10))
             .map(|digit_option: Option<u32>| digit_option.unwrap())
             .tuples::<(_, _, _)>()
-            .map(|triple|
+            .map(|triple| {
                 Trigram(
                     Line::from_usize(triple.0 as usize),
                     Line::from_usize(triple.1 as usize),
                     Line::from_usize(triple.2 as usize),
                 )
-            );
+            });
 
         Some(Hexagram {
             _above: trigrams.next().unwrap(),
@@ -86,12 +86,10 @@ impl Hexagram {
         self.get_lines_as_vec()
             .iter()
             .enumerate()
-            .filter_map(|enumerated_line|
-                match enumerated_line {
-                    (index, Line::BrokenChanging) |
-                    (index, Line::UnbrokenChanging) => Some(index),
-                    _ => None,
-                })
+            .filter_map(|enumerated_line| match enumerated_line {
+                (index, Line::BrokenChanging) | (index, Line::UnbrokenChanging) => Some(index),
+                _ => None,
+            })
             .collect()
     }
 
@@ -129,12 +127,15 @@ impl Hexagram {
     /// A utility function to get a `TrigramNamePair` pre- or post-changes. Mainly used to
     /// interface with utilities in the `trigram` module.
     fn _as_trigram_name_pair(&self, with_changes: bool) -> TrigramNamePair {
-        TrigramNamePair(self._above.get_name(with_changes), self._below.get_name(with_changes))
+        TrigramNamePair(
+            self._above.get_name(with_changes),
+            self._below.get_name(with_changes),
+        )
     }
-//
-//    fn _validate_digits_string(digits: &str) -> bool {
-//
-//    }
+    //
+    //    fn _validate_digits_string(digits: &str) -> bool {
+    //
+    //    }
 }
 
 impl Default for Hexagram {

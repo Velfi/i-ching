@@ -1,10 +1,9 @@
 use clap::Arg;
 
-use crate::args::{
-    hexagram, trigram,
-};
+use crate::args::{hexagram, trigram};
 
-pub const HELP: &str = "(A 6 digit number){n}Cast your own coins and enter the sequence as a series of digits.{n} ";
+pub const HELP: &str =
+    "(A 6 digit number){n}Cast your own coins and enter the sequence as a series of digits.{n} ";
 pub const LONG_HELP: &str = "\
 For each line, cast 3 coins. Heads count for 3 and tails count for 2. Add up the \
 result of casting 3 coins to get a number between 6 and 9. After casting enough \

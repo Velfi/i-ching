@@ -10,10 +10,6 @@
 [crates-link]: https://crates.io/crates/iching/
 [license-link]: COPYING
 
-**This crate requires beta or nightly until the 2018 edition becomes stable. The
-auto docs may not build correctly until then either. That being said, running
-`cargo doc --open` will work just fine.**
-
 This library contains methods for divination using the I Ching and also includes a CLI app
 for making predictions in your terminal. The CLI app was inspired by the original
 [ching(6)](http://cfcl.com/ching/man/) unix app.

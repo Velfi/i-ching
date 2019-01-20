@@ -1,8 +1,6 @@
 use clap::Arg;
 
-use crate::args::{
-    hexagram, trigram,
-};
+use crate::args::{hexagram, trigram};
 
 pub const HELP: &str = "(A double-quoted string){n}A question that you wish to answer.{n} ";
 pub const LONG_HELP: &str = "\

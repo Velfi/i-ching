@@ -1,10 +1,9 @@
 use clap::Arg;
 
-use crate::args::{
-    cast, question, trigram,
-};
+use crate::args::{cast, question, trigram};
 
-pub const HELP: &str = "(A number 1-64){n}Look up a hexagram by number in the King Wen sequence.{n} ";
+pub const HELP: &str =
+    "(A number 1-64){n}Look up a hexagram by number in the King Wen sequence.{n} ";
 pub const LONG_HELP: &str = "\
 Look up a hexagram by number in the King Wen sequence.{n}
 example:{n}iching -h 42{n} ";
