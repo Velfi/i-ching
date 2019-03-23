@@ -12,8 +12,8 @@ use crate::coin::Coin;
 #[derive(Debug, Clone)]
 pub enum Line {
     BrokenChanging,
-    Broken,
     Unbroken,
+    Broken,
     UnbrokenChanging,
 }
 
@@ -21,8 +21,8 @@ impl Line {
     pub fn from_usize(n: usize) -> Self {
         match n {
             6 => Line::BrokenChanging,
-            7 => Line::Broken,
-            8 => Line::Unbroken,
+            7 => Line::Unbroken,
+            8 => Line::Broken,
             9 => Line::UnbrokenChanging,
             _ => unreachable!(),
         }
@@ -40,8 +40,8 @@ impl Line {
 
         match toss_total {
             6 => Line::BrokenChanging,
-            7 => Line::Broken,
-            8 => Line::Unbroken,
+            7 => Line::Unbroken,
+            8 => Line::Broken,
             9 => Line::UnbrokenChanging,
             _ => unreachable!(),
         }
@@ -71,8 +71,8 @@ impl Line {
         use crate::symbols::big_line::*;
         match self {
             BrokenChanging => print!("{}", BIG_BROKEN_CHANGING),
-            Broken => print!("{}", BIG_BROKEN),
             Unbroken => print!("{}", BIG_UNBROKEN),
+            Broken => print!("{}", BIG_BROKEN),
             UnbrokenChanging => print!("{}", BIG_UNBROKEN_CHANGING),
         };
     }
@@ -90,8 +90,8 @@ impl Display for Line {
         use self::Line::*;
         let line_string = match self {
             BrokenChanging => "-X-",
-            Broken => "- -",
             Unbroken => "---",
+            Broken => "- -",
             UnbrokenChanging => "-O-",
         };
         write!(f, "{}", line_string)
@@ -103,8 +103,8 @@ impl Distribution<Line> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Line {
         match rng.gen_range(6, 10) {
             6 => Line::BrokenChanging,
-            7 => Line::Broken,
-            8 => Line::Unbroken,
+            7 => Line::Unbroken,
+            8 => Line::Broken,
             9 => Line::UnbrokenChanging,
             _ => unreachable!(),
         }
