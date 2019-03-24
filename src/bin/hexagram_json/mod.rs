@@ -81,6 +81,7 @@ pub struct RawHexagramJsonInfo {
 pub struct NameTranslations {
     english: String,
     chinese: String,
+    pinyin: String,
 }
 
 pub struct HexagramJsonInfo {
@@ -93,6 +94,10 @@ pub struct HexagramJsonInfo {
 }
 
 impl HexagramInfo for HexagramJsonInfo {
+    fn get_pinyin_name(&self) -> &str {
+        &self._name.pinyin
+    }
+
     fn get_chinese_name(&self) -> &str {
         &self._name.chinese
     }

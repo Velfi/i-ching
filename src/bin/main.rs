@@ -151,7 +151,7 @@ fn print_fortune(question: Option<&str>, hexagram: Hexagram, hexagrams: &impl He
 
     // Print info for the relating hexagram (if applicable)
     if let Some(hexagram_info) = hexagram_info_post_changes {
-        print!("Changes into:\n\n{}", hexagram_info);
+        print!("Changes into:\n{}", hexagram_info);
     }
 }
 
