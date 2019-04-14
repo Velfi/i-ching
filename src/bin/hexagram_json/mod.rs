@@ -115,9 +115,11 @@ impl HexagramInfo for HexagramJsonInfo {
     }
 
     fn get_line_meanings(&self, changing_lines: &[usize]) -> Vec<&ChangingLineMeaning> {
+        let shim: usize = 1;
         self._lines
             .iter()
-            .filter(|&line_meaning| changing_lines.contains(&line_meaning.position))
+            .filter(|&line_meaning|
+                    changing_lines.contains(&(line_meaning.position - shim)))
             .collect()
     }
 
