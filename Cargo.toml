@@ -9,7 +9,7 @@ keywords = ["divination", "iching", "fortune"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/Velfi/i-ching"
-version = "0.3.2"
+version = "0.4.0"
 
 [lib]
 name = "iching"
@@ -20,8 +20,8 @@ name = "iching"
 path = "src/bin/main.rs"
 
 [dependencies]
-clap = { version = "2.32", features = ["color"] }
-itertools = "~0.7"
+clap = { version = "2.33", features = ["color"] }
+itertools = "~0.8"
 rand = "~0.5"
 serde = "~1.0"
 serde_derive = "~1.0"

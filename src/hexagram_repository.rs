@@ -64,7 +64,12 @@ pub trait HexagramInfo {
 impl Display for &dyn HexagramInfo {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         writeln!(f)?;
-        writeln!(f, "Hexagram No. {}  {}", self.get_number(), self.get_symbol())?;
+        writeln!(
+            f,
+            "Hexagram No. {}  {}",
+            self.get_number(),
+            self.get_symbol()
+        )?;
         writeln!(f, "  {}", self.get_localized_name())?;
         writeln!(
             f,

@@ -88,7 +88,7 @@ impl Hexagram {
             .iter()
             .enumerate()
             .filter_map(|enumerated_line| match enumerated_line {
-                (index, Line::BrokenChanging) | (index, Line::UnbrokenChanging) => Some(index),
+                (index, Line::BrokenChanging) | (index, Line::UnbrokenChanging) => Some(index + 1),
                 _ => None,
             })
             .collect()
