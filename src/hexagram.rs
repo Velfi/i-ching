@@ -51,6 +51,7 @@ impl Hexagram {
 
         let mut trigrams = digits
             .chars()
+            .rev()
             .map(|digit_char: char| digit_char.to_digit(10))
             .map(|digit_option: Option<u32>| digit_option.unwrap())
             .tuples::<(_, _, _)>()
