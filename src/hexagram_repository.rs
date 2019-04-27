@@ -40,6 +40,8 @@ pub struct ChangingLineMeaning {
 /// A generic interface to some data for a hexagram. `HexagramInfo` objects are provided by
 /// a `HexagramRepository`, and are referred to by number.
 pub trait HexagramInfo {
+    /// Get the hexagram name as romanized Pinyin
+    fn get_pinyin_name(&self) -> &str;
     /// Get the hexagram name as Chinese characters.
     fn get_chinese_name(&self) -> &str;
     /// Get the hexagram name as a localized `&str`.
@@ -61,18 +63,20 @@ pub trait HexagramInfo {
 
 impl Display for &dyn HexagramInfo {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        writeln!(f, "  {} (No. {})", self.get_symbol(), self.get_number())?;
+        writeln!(f)?;
+        writeln!(f, "Hexagram No. {}  {}", self.get_number(), self.get_symbol())?;
+        writeln!(f, "  {}", self.get_localized_name())?;
         writeln!(
             f,
-            "{} - {}",
+            "  {} ({})",
             self.get_chinese_name(),
-            self.get_localized_name()
+            self.get_pinyin_name(),
         )?;
         writeln!(f)?;
-        writeln!(f, "  Judgement:")?;
-        writeln!(f, "{}", self.get_judgement())?;
-        writeln!(f, "  Images:")?;
-        writeln!(f, "{}", self.get_images())?;
+        writeln!(f, "Judgement:")?;
+        writeln!(f, "  {}", self.get_judgement())?;
+        writeln!(f, "Images:")?;
+        writeln!(f, "  {}", self.get_images())?;
 
         Ok(())
     }

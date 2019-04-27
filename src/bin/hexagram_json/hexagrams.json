@@ -2,7 +2,8 @@
   {
     "number": 1,
     "name": {
-      "chinese": "Ch'ien",
+      "chinese": "乾",
+      "pinyin": "Qián",
       "english": "The Creative"
     },
     "trigramPair": {
@@ -41,7 +42,8 @@
   {
     "number": 2,
     "name": {
-      "chinese": "K'un",
+      "chinese": "坤",
+      "pinyin": "kūn",
       "english": "The Receptive"
     },
     "trigramPair": {
@@ -80,7 +82,8 @@
   {
     "number": 3,
     "name": {
-      "chinese": "Chun",
+      "chinese": "屯",
+      "pinyin": "zhūn",
       "english": "Difficulty at the Beginning"
     },
     "trigramPair": {
@@ -119,7 +122,8 @@
   {
     "number": 4,
     "name": {
-      "chinese": "Mo'^e'ng",
+      "chinese": "蒙",
+      "pinyin": "méng",
       "english": "Youthful Folly"
     },
     "trigramPair": {
@@ -158,7 +162,8 @@
   {
     "number": 5,
     "name": {
-      "chinese": "Hsu",
+      "chinese": "需",
+      "pinyin": "xū",
       "english": "Waiting (Nourishment)"
     },
     "trigramPair": {
@@ -197,7 +202,8 @@
   {
     "number": 6,
     "name": {
-      "chinese": "Sung",
+      "chinese": "訟",
+      "pinyin": "sòng",
       "english": "Conflict"
     },
     "trigramPair": {
@@ -236,7 +242,8 @@
   {
     "number": 7,
     "name": {
-      "chinese": "Shih",
+      "chinese": "師",
+      "pinyin": "shī",
       "english": "The Army"
     },
     "trigramPair": {
@@ -275,7 +282,8 @@
   {
     "number": 8,
     "name": {
-      "chinese": "Pi",
+      "chinese": "比",
+      "pinyin": "bǐ",
       "english": "Holding Together [Union]"
     },
     "trigramPair": {
@@ -314,7 +322,8 @@
   {
     "number": 9,
     "name": {
-      "chinese": "Hsiao Ch'u",
+      "chinese": "小畜",
+      "pinyin": "xiǎo chù",
       "english": "The Taming Power of the Small"
     },
     "trigramPair": {
@@ -353,7 +362,8 @@
   {
     "number": 10,
     "name": {
-      "chinese": "Lu",
+      "chinese": "履",
+      "pinyin": "lǚ",
       "english": "Treading [Conduct]"
     },
     "trigramPair": {
@@ -392,7 +402,8 @@
   {
     "number": 11,
     "name": {
-      "chinese": "T'ai",
+      "chinese": "泰",
+      "pinyin": "tài",
       "english": "Peace"
     },
     "trigramPair": {
@@ -431,7 +442,8 @@
   {
     "number": 12,
     "name": {
-      "chinese": "P'i",
+      "chinese": "否",
+      "pinyin": "pǐ",
       "english": "Standstill [Stagnation]"
     },
     "trigramPair": {
@@ -470,7 +482,8 @@
   {
     "number": 13,
     "name": {
-      "chinese": "T'ung Jo'^e'n",
+      "chinese": "同人",
+      "pinyin": "tóng rén",
       "english": "Fellowship with Men"
     },
     "trigramPair": {
@@ -509,7 +522,8 @@
   {
     "number": 14,
     "name": {
-      "chinese": "Ta Yu",
+      "chinese": "大有",
+      "pinyin": "dà yǒu",
       "english": "Possession in Great Measure"
     },
     "trigramPair": {
@@ -548,7 +562,8 @@
   {
     "number": 15,
     "name": {
-      "chinese": "Ch'ien",
+      "chinese": "謙",
+      "pinyin": "qiān",
       "english": "Modesty"
     },
     "trigramPair": {
@@ -587,7 +602,8 @@
   {
     "number": 16,
     "name": {
-      "chinese": "Yu",
+      "chinese": "豫",
+      "pinyin": "yù",
       "english": "Enthusiasm"
     },
     "trigramPair": {
@@ -626,7 +642,8 @@
   {
     "number": 17,
     "name": {
-      "chinese": "Sui",
+      "chinese": "隨",
+      "pinyin": "suí",
       "english": "Following"
     },
     "trigramPair": {
@@ -665,7 +682,8 @@
   {
     "number": 18,
     "name": {
-      "chinese": "Ku",
+      "chinese": "蠱",
+      "pinyin": "gŭ",
       "english": "Work on What Has Been Spoiled [Decay]"
     },
     "trigramPair": {
@@ -704,7 +722,8 @@
   {
     "number": 19,
     "name": {
-      "chinese": "Lin",
+      "chinese": "臨",
+      "pinyin": "lín",
       "english": "Approach"
     },
     "trigramPair": {
@@ -743,7 +762,8 @@
   {
     "number": 20,
     "name": {
-      "chinese": "Kuan",
+      "chinese": "觀",
+      "pinyin": "guān",
       "english": "Contemplation (View)"
     },
     "trigramPair": {
@@ -782,7 +802,8 @@
   {
     "number": 21,
     "name": {
-      "chinese": "Shih Ho",
+      "chinese": "噬嗑",
+      "pinyin": "shì kè",
       "english": "Biting Through"
     },
     "trigramPair": {
@@ -821,7 +842,8 @@
   {
     "number": 22,
     "name": {
-      "chinese": "Pi",
+      "chinese": "賁",
+      "pinyin": "bì",
       "english": "Grace"
     },
     "trigramPair": {
@@ -860,7 +882,8 @@
   {
     "number": 23,
     "name": {
-      "chinese": "Po",
+      "chinese": "剝",
+      "pinyin": "bō",
       "english": "Splitting Apart"
     },
     "trigramPair": {
@@ -899,7 +922,8 @@
   {
     "number": 24,
     "name": {
-      "chinese": "Fu",
+      "chinese": "復",
+      "pinyin": "fù",
       "english": "Return (The Turning Point)"
     },
     "trigramPair": {
@@ -938,7 +962,8 @@
   {
     "number": 25,
     "name": {
-      "chinese": "Wu Wang",
+      "chinese": "無妄",
+      "pinyin": "wú wàng",
       "english": "Innocence (The Unexpected)"
     },
     "trigramPair": {
@@ -977,7 +1002,8 @@
   {
     "number": 26,
     "name": {
-      "chinese": "Ta Ch'u",
+      "chinese": "大畜",
+      "pinyin": "dà chù",
       "english": "The Taming Power of the Great"
     },
     "trigramPair": {
@@ -1016,7 +1042,8 @@
   {
     "number": 27,
     "name": {
-      "chinese": "I",
+      "chinese": "頤",
+      "pinyin": "yí",
       "english": "The Corners of the Mouth (Providing Nourishment)"
     },
     "trigramPair": {
@@ -1055,7 +1082,8 @@
   {
     "number": 28,
     "name": {
-      "chinese": "Ta Kuo",
+      "chinese": "大過",
+      "pinyin": "dà guò",
       "english": "Preponderance of the Great"
     },
     "trigramPair": {
@@ -1094,7 +1122,8 @@
   {
     "number": 29,
     "name": {
-      "chinese": "K'an",
+      "chinese": "坎",
+      "pinyin": "kǎn",
       "english": "The Abysmal (Water)"
     },
     "trigramPair": {
@@ -1133,7 +1162,8 @@
   {
     "number": 30,
     "name": {
-      "chinese": "Li",
+      "chinese": "離",
+      "pinyin": "lí",
       "english": "The Clinging, Fire"
     },
     "trigramPair": {
@@ -1172,7 +1202,8 @@
   {
     "number": 31,
     "name": {
-      "chinese": "Hsien",
+      "chinese": "咸",
+      "pinyin": "xián",
       "english": "Influence (Wooing)"
     },
     "trigramPair": {
@@ -1211,7 +1242,8 @@
   {
     "number": 32,
     "name": {
-      "chinese": "Ho'^e'ng",
+      "chinese": "恆",
+      "pinyin": "héng",
       "english": "Duration"
     },
     "trigramPair": {
@@ -1250,7 +1282,8 @@
   {
     "number": 33,
     "name": {
-      "chinese": "Tun",
+      "chinese": "遯",
+      "pinyin": "dùn",
       "english": "Retreat"
     },
     "trigramPair": {
@@ -1289,7 +1322,8 @@
   {
     "number": 34,
     "name": {
-      "chinese": "Ta Chuang",
+      "chinese": "大壯",
+      "pinyin": "dà zhuàng",
       "english": "The Power of the Great"
     },
     "trigramPair": {
@@ -1328,7 +1362,8 @@
   {
     "number": 35,
     "name": {
-      "chinese": "Chin",
+      "chinese": "晉",
+      "pinyin": "jìn",
       "english": "Progress"
     },
     "trigramPair": {
@@ -1367,7 +1402,8 @@
   {
     "number": 36,
     "name": {
-      "chinese": "Ming I",
+      "chinese": "明夷",
+      "pinyin": "míng yí",
       "english": "Darkening of the Light"
     },
     "trigramPair": {
@@ -1406,7 +1442,8 @@
   {
     "number": 37,
     "name": {
-      "chinese": "Chia Jo'^e'n",
+      "chinese": "家人",
+      "pinyin": "jiā rén",
       "english": "The Family [The Clan]"
     },
     "trigramPair": {
@@ -1445,7 +1482,8 @@
   {
     "number": 38,
     "name": {
-      "chinese": "K'uei",
+      "chinese": "睽",
+      "pinyin": "kuí",
       "english": "Opposition"
     },
     "trigramPair": {
@@ -1484,7 +1522,8 @@
   {
     "number": 39,
     "name": {
-      "chinese": "Chien",
+      "chinese": "蹇",
+      "pinyin": "jiǎn",
       "english": "Obstruction"
     },
     "trigramPair": {
@@ -1523,7 +1562,8 @@
   {
     "number": 40,
     "name": {
-      "chinese": "Hsieh",
+      "chinese": "解",
+      "pinyin": "xiè",
       "english": "Deliverance"
     },
     "trigramPair": {
@@ -1562,7 +1602,8 @@
   {
     "number": 41,
     "name": {
-      "chinese": "Sun",
+      "chinese": "損",
+      "pinyin": "sǔn",
       "english": "Decrease"
     },
     "trigramPair": {
@@ -1601,7 +1642,8 @@
   {
     "number": 42,
     "name": {
-      "chinese": "I",
+      "chinese": "益",
+      "pinyin": "yì",
       "english": "Increase"
     },
     "trigramPair": {
@@ -1640,7 +1682,8 @@
   {
     "number": 43,
     "name": {
-      "chinese": "Kuai",
+      "chinese": "夬",
+      "pinyin": "guài",
       "english": "Break-through (Resoluteness)"
     },
     "trigramPair": {
@@ -1679,7 +1722,8 @@
   {
     "number": 44,
     "name": {
-      "chinese": "Kou",
+      "chinese": "姤",
+      "pinyin": "gòu",
       "english": "Coming to Meet"
     },
     "trigramPair": {
@@ -1718,7 +1762,8 @@
   {
     "number": 45,
     "name": {
-      "chinese": "Ts'ui",
+      "chinese": "萃",
+      "pinyin": "cuì",
       "english": "Gathering Together [Massing]"
     },
     "trigramPair": {
@@ -1757,7 +1802,8 @@
   {
     "number": 46,
     "name": {
-      "chinese": "Sho'^e'ng",
+      "chinese": "升",
+      "pinyin": "shēng",
       "english": "Pushing Upward"
     },
     "trigramPair": {
@@ -1796,7 +1842,8 @@
   {
     "number": 47,
     "name": {
-      "chinese": "K'un",
+      "chinese": "困",
+      "pinyin": "kùn",
       "english": "Oppression (Exhaustion)"
     },
     "trigramPair": {
@@ -1835,7 +1882,8 @@
   {
     "number": 48,
     "name": {
-      "chinese": "Ching",
+      "chinese": "井",
+      "pinyin": "jǐng",
       "english": "The Well"
     },
     "trigramPair": {
@@ -1874,7 +1922,8 @@
   {
     "number": 49,
     "name": {
-      "chinese": "Ko",
+      "chinese": "革",
+      "pinyin": "gé",
       "english": "Revolution (Molting)"
     },
     "trigramPair": {
@@ -1913,7 +1962,8 @@
   {
     "number": 50,
     "name": {
-      "chinese": "Ting",
+      "chinese": "鼎",
+      "pinyin": "dǐng",
       "english": "The Caldron"
     },
     "trigramPair": {
@@ -1952,7 +2002,8 @@
   {
     "number": 51,
     "name": {
-      "chinese": "Cho'^e'n",
+      "chinese": "震",
+      "pinyin": "zhèn",
       "english": "The Arousing (Shock, Thunder)"
     },
     "trigramPair": {
@@ -1991,7 +2042,8 @@
   {
     "number": 52,
     "name": {
-      "chinese": "Ko'^e'n",
+      "chinese": "艮",
+      "pinyin": "gèn",
       "english": "Keeping Still, Mountain"
     },
     "trigramPair": {
@@ -2030,7 +2082,8 @@
   {
     "number": 53,
     "name": {
-      "chinese": "Chien",
+      "chinese": "漸",
+      "pinyin": "jiàn",
       "english": "Development (Gradual Progress)"
     },
     "trigramPair": {
@@ -2069,7 +2122,8 @@
   {
     "number": 54,
     "name": {
-      "chinese": "Kuei Mei",
+      "chinese": "歸妹",
+      "pinyin": "guī mèi",
       "english": "The Marrying Maiden"
     },
     "trigramPair": {
@@ -2108,7 +2162,8 @@
   {
     "number": 55,
     "name": {
-      "chinese": "Fo'^e'ng",
+      "chinese": "豐",
+      "pinyin": "fēng",
       "english": "Abundance [Fullness]"
     },
     "trigramPair": {
@@ -2147,7 +2202,8 @@
   {
     "number": 56,
     "name": {
-      "chinese": "Lu",
+      "chinese": "旅",
+      "pinyin": "lǚ",
       "english": "The Wanderer"
     },
     "trigramPair": {
@@ -2186,7 +2242,8 @@
   {
     "number": 57,
     "name": {
-      "chinese": "Sun",
+      "chinese": "巽",
+      "pinyin": "xùn",
       "english": "The Gentle (The Penetrating, Wind)"
     },
     "trigramPair": {
@@ -2225,7 +2282,8 @@
   {
     "number": 58,
     "name": {
-      "chinese": "Tui",
+      "chinese": "兌",
+      "pinyin": "duì",
       "english": "The Joyous, Lake"
     },
     "trigramPair": {
@@ -2264,7 +2322,8 @@
   {
     "number": 59,
     "name": {
-      "chinese": "Huan",
+      "chinese": "渙",
+      "pinyin": "huàn",
       "english": "Dispersion [Dissolution]"
     },
     "trigramPair": {
@@ -2303,7 +2362,8 @@
   {
     "number": 60,
     "name": {
-      "chinese": "Chieh",
+      "chinese": "節",
+      "pinyin": "jié",
       "english": "Limitation"
     },
     "trigramPair": {
@@ -2342,7 +2402,8 @@
   {
     "number": 61,
     "name": {
-      "chinese": "Chung Fu",
+      "chinese": "中孚",
+      "pinyin": "zhōng fú",
       "english": "Inner Truth"
     },
     "trigramPair": {
@@ -2381,7 +2442,8 @@
   {
     "number": 62,
     "name": {
-      "chinese": "Hsiao Kuo",
+      "chinese": "小過",
+      "pinyin": "xiǎo guò",
       "english": "Preponderance of the Small"
     },
     "trigramPair": {
@@ -2420,7 +2482,8 @@
   {
     "number": 63,
     "name": {
-      "chinese": "Chi Chi",
+      "chinese": "既濟",
+      "pinyin": "jì jì",
       "english": "After Completion"
     },
     "trigramPair": {
@@ -2459,7 +2522,8 @@
   {
     "number": 64,
     "name": {
-      "chinese": "Wei Chi",
+      "chinese": "未濟",
+      "pinyin": "wèi jì",
       "english": "Before Completion"
     },
     "trigramPair": {
