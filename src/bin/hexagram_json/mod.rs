@@ -44,7 +44,7 @@ impl HexagramRepository for HexagramJson {
     // Load hexagram data from json. The json file is inlined into the executable using
     // `include_str!`. Then, `serde_json` parses it into a `Vec<RawHexagramInfo>` which
     // is then converted into a `Vec<HexagramInfo>`.
-    fn initialize(&mut self) -> Result<(), Box<std::error::Error>> {
+    fn initialize(&mut self) -> Result<(),  Box<dyn std::error::Error>> {
         let json_file = include_str!("hexagrams.json");
         let raw_hexagram_json: Vec<RawHexagramJsonInfo> = serde_json::from_str(&json_file)?;
         self._list = raw_hexagram_json

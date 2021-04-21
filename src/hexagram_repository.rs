@@ -27,7 +27,7 @@ pub trait HexagramRepository {
     fn get_ordering(&self) -> &HexagramOrdering;
     /// Do anything necessary to initialize this repository. Returns an empty `Result`
     /// if successful and returns a boxed error otherwise.
-    fn initialize(&mut self) -> Result<(), Box<Error>>;
+    fn initialize(&mut self) -> Result<(), Box<dyn Error>>;
 }
 
 /// Associates the meaning of a changing line with the position of a changing line in a hexagram.
