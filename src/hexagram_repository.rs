@@ -1,11 +1,9 @@
+use crate::hexagram::HexagramOrdering;
+use serde_derive::Deserialize;
 use std::{
     error::Error,
     fmt::{self, Display, Formatter},
 };
-
-use serde_derive::Deserialize;
-
-use crate::hexagram::HexagramOrdering;
 
 /// A generic interface for some repository of information on individual hexagrams. For example,
 /// this repository could be a local JSON file or even some data in a remote server. It allows

@@ -1,10 +1,9 @@
-use itertools::Itertools;
-
 use crate::{
     line::Line,
     symbols::big_line::BIG_LINE_SPACER,
     trigram::{Trigram, TrigramNamePair},
 };
+use itertools::Itertools;
 
 /// The 64 Hexagrams have several different orderings, the most
 /// common of which is the King Wen sequence.
@@ -79,7 +78,7 @@ impl Hexagram {
 
     /// Get a `&str` to a unicode symbol representing the Hexagram.
     pub fn symbol(&self, with_changes: bool) -> &str {
-        &self._as_trigram_name_pair(with_changes).as_symbol()
+        self._as_trigram_name_pair(with_changes).as_symbol()
     }
 
     /// Get a `Vec` of `usize`s representing the positions of lines that are marked as "changing".

@@ -1,11 +1,9 @@
-use std::fmt::{Display, Error, Formatter};
-
+use crate::coin::Coin;
 use rand::{
     distributions::{Distribution, Standard},
     Rng,
 };
-
-use crate::coin::Coin;
+use std::fmt::{Display, Error, Formatter};
 
 /// `Line` represents an individual line within a trigram or hexagram. Hexagrams and trigrams can
 /// "change" into other hexagrams and trigrams based on which lines are marked as "changing".
@@ -101,7 +99,7 @@ impl Display for Line {
 impl Distribution<Line> for Standard {
     /// Generate a random `Line` that may or may not be "changing".
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Line {
-        match rng.gen_range(6, 10) {
+        match rng.gen_range(6..10) {
             6 => Line::BrokenChanging,
             7 => Line::Unbroken,
             8 => Line::Broken,

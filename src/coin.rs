@@ -1,4 +1,7 @@
-use rand::{distributions::Distribution, distributions::Standard, Rng};
+use rand::{
+    distributions::{Distribution, Standard},
+    Rng,
+};
 
 /// Represents the possible states of a coin toss.
 /// Used for randomly generating [`Line`](../line/enum.Line.html)s.

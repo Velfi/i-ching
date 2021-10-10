@@ -1,11 +1,9 @@
-use std::{error::Error, fmt::Display, fmt::Formatter};
-
-use serde_derive::Deserialize;
-
 use crate::{
     line::Line,
     symbols::{hexagram::*, trigram::*},
 };
+use serde_derive::Deserialize;
+use std::{fmt::Display, fmt::Formatter};
 
 /// A `Trigram` is a tuple of three [`Line`](../line/enum.Line.html)s. It can be converted into
 /// a [`TrigramName`](enum.TrigramName.html) by calling `get_name()` on it. This is the building
@@ -74,21 +72,14 @@ impl Default for Trigram {
 /// "settled" `Trigram` that will not "change."
 #[derive(Deserialize, Clone, Debug)]
 pub enum TrigramName {
-    Dui,
-    // 兌, Duì
-    Gen,
-    // 艮, Gèn
-    Kan,
-    // 坎, Kǎn
-    Kun,
-    // 坤, Kūn
-    Li,
-    // 離, Lí
-    Qian,
-    // 乾, Qián
-    Xun,
-    // 巽, Xùn
-    Zhen, // 震, Zhèn
+    Dui,  // Lake or Marsh, 兌, Duì
+    Gen,  // Mountain, 艮, Gèn
+    Kan,  // Water, 坎, Kǎn
+    Kun,  // Earth, 坤, Kūn
+    Li,   // Flame or Fire, 離, Lí
+    Qian, // Heaven, 乾, Qián
+    Xun,  // Wind, 巽, Xùn
+    Zhen, // Thunder, 震, Zhèn
 }
 
 impl TrigramName {
@@ -394,29 +385,9 @@ impl TrigramNamePair {
 }
 
 /// Errors related to `Trigram`s.
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub enum TrigramError {
     /// Thrown when creating a `TrigramName` from an integer, if the given integer is not between 1-8 inclusive.
+    #[error( "Invalid conversion from usize to TrigramName, make sure your usize is between 1-8 inclusive")]
     IntegerOutOfRange,
-}
-
-static INTEGER_OUT_OF_RANGE_ERROR_MSG: &str =
-    "Invalid conversion from usize to TrigramName, make sure your usize is between 1-8 inclusive";
-
-impl Display for TrigramError {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), std::fmt::Error> {
-        use self::TrigramError::*;
-        match self {
-            IntegerOutOfRange => write!(f, "{}", INTEGER_OUT_OF_RANGE_ERROR_MSG),
-        }
-    }
-}
-
-impl Error for TrigramError {
-    fn description(&self) -> &str {
-        use self::TrigramError::*;
-        match self {
-            IntegerOutOfRange => INTEGER_OUT_OF_RANGE_ERROR_MSG,
-        }
-    }
 }

@@ -1,15 +1,12 @@
-use clap::AppSettings;
-use clap::{App, ArgMatches};
-
+use self::{
+    args::{cast, hexagram, question, trigram},
+    hexagram_json::HexagramJson,
+};
+use clap::{App, AppSettings, ArgMatches};
 use iching::{
     hexagram::{Hexagram, HexagramOrdering},
     hexagram_repository::{HexagramInfo, HexagramRepository},
     trigram::TrigramName,
-};
-
-use self::{
-    args::{cast, hexagram, question, trigram},
-    hexagram_json::HexagramJson,
 };
 
 mod args;
@@ -63,7 +60,7 @@ fn main() {
     }
 }
 
-fn start_app_and_get_matches() -> ArgMatches<'static> {
+fn start_app_and_get_matches() -> ArgMatches {
     App::new(APP_TITLE)
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
