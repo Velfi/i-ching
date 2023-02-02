@@ -1,6 +1,5 @@
-//! This library contains methods for divination using the I Ching and also includes a CLI app
-//! for making predictions in your terminal. The CLI app was inspired by the original
-//! [ching(6)](http://cfcl.com/ching/man/) unix app.
+//! This library contains methods for divination using the I Ching. The related CLI app was inspired
+//! by the original [ching(6)](http://cfcl.com/ching/man/) unix program.
 //!
 //! The I Ching (a.k.a. the *Book of Changes*) is an ancient method of divination based on
 //! cleromancy (assigning meaning to the generation of apparently random numbers.) Six numbers
@@ -10,44 +9,60 @@
 //! You can find lots of great information on the 2000+ year history of the I Ching on
 //! [Wikipedia](https://en.wikipedia.org/wiki/I_Ching)
 //!
-//! To install this crate as a CLI app, just run
-//! ```
+//! ## Installing and running the CLI app
+//!
+//! To install the CLI app, just run
+//!
+//! ```sh
 //! cargo install iching
 //! ```
-//! Once installed, you can access the CLI help screen like this:
-//! ```
-//! iching --help
-//! ```
 //!
-//! This project is a work in progress. If you find any issues, please submit them through Github.
+//! Once installed, you can access the help screen by running the CLI with no arguments.
 //!
-//! # A simplified example:
+//! If you find any issues, please submit them through Github.
 //!
-//! ```rust,no_run
-//!    // Implementing the HexagramRepository trait is the most complex
-//!    // aspect of using this library. See the included CLI app for an
-//!    // example implementation called HexagramJson.
-//!    let mut hexagrams: HexagramRepository = HexagramJson::new();
+//! # A simplified example of using this library:
 //!
-//!    // Don't forget to initialize repository after construction, else
-//!    // it could fail to work or even panic.
-//!    hexagrams.initialize().expect("Initialization of hexagrams has failed");
+//! ```no_run
+//! use iching::{Hexagram, HexagramOrdering, HexagramRepository, divination_method::DivinationMethod};
+//! # #[derive(Debug)]
+//! # struct HexagramExampleInfo;
+//! # struct HexagramExampleRepository;
+//! # impl HexagramExampleRepository {
+//! #     fn new() -> Self { HexagramExampleRepository }
+//! #     fn initialize(&mut self) -> Result<(), Box<(dyn std::error::Error + 'static)>> { Ok(()) }
+//! # }
+//! # impl HexagramRepository for HexagramExampleRepository {
+//! #     type HexagramInfo = HexagramExampleInfo;
+//! #
+//! #     fn initialize(&mut self) -> Result<(), Box<(dyn std::error::Error + 'static)>> { Ok(()) }
+//! #     fn get_is_initialized(&self) -> bool { true }
+//! #     fn get_ordering(&self) -> &HexagramOrdering { &HexagramOrdering::KingWen }
+//! #     fn get_by_number(&self, _number: u8) -> Option<&Self::HexagramInfo> { None }
+//! #     fn get_info_for_hexagram(&self, _hexagram: &Hexagram) -> &Self::HexagramInfo { &HexagramExampleInfo }
+//! # }
 //!
-//!    // Create a new random hexagram.
-//!    let new_hexagram = Hexagram::from_coin_tosses();
-//!    // Get the number of the hexagram according to changing lines and ordering
-//!    let hexagram_number = new_hexagram.as_number(false, HexagramOrdering::KingWen);
+//! // Implementing the HexagramRepository trait is the most complex
+//! // aspect of using this library. See the included CLI app for an
+//! // example implementation called HexagramExampleRepository.
+//! let hexagrams: &mut dyn HexagramRepository<HexagramInfo = HexagramExampleInfo> = &mut HexagramExampleRepository::new();
 //!
-//!    // Fetch the hexagram's info from the repository that was initialized earlier.
-//!    let hexagram_info = hexagrams.get_by_number(hexagram_number)
-//!                                 .expect("Failed to get hexagram info by number (pre)");
+//! // Don't forget to initialize repository after construction, else
+//! // it could fail to work or even panic.
+//! hexagrams.initialize().expect("Initialization of hexagrams has failed");
 //!
-//!    // Print the hexagram info for the user
-//!    print!("{}", hexagram_info);
+//! // Create a new random hexagram.
+//! let new_hexagram = Hexagram::new_random(DivinationMethod::AncientYarrowStalk);
+//!
+//! // Fetch the hexagram's info from the repository that was initialized earlier.
+//! let hexagram_info = hexagrams.get_info_for_hexagram(&new_hexagram);
+//!
+//! // Print the hexagram info for the user
+//! print!("{hexagram_info:?}");
 //! ```
 
-/// This module contains functions for doing random virtual coin tosses.
-pub mod coin;
+/// Types related to the various methods of divination.
+pub mod divination_method;
 /// `Hexagram`s are used for divination in the I Ching.
 /// This module contains hexagram generation and management tools.
 pub mod hexagram;
@@ -61,3 +76,6 @@ pub mod symbols;
 /// `Trigram`s are the building blocks of `Hexagrams`.
 /// This module contains trigram generation and management tools.
 pub mod trigram;
+
+pub use hexagram::{Hexagram, HexagramOrdering};
+pub use hexagram_repository::HexagramRepository;

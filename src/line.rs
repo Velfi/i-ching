@@ -1,110 +1,161 @@
-use crate::coin::Coin;
-use rand::{
-    distributions::{Distribution, Standard},
-    Rng,
-};
-use std::fmt::{Display, Error, Formatter};
+use crate::divination_method::DivinationMethod;
+use num_bigint::BigInt;
+use std::fmt;
 
 /// `Line` represents an individual line within a trigram or hexagram. Hexagrams and trigrams can
 /// "change" into other hexagrams and trigrams based on which lines are marked as "changing".
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Line {
-    BrokenChanging,
-    Unbroken,
-    Broken,
-    UnbrokenChanging,
+    Unbroken { changing: bool },
+    Broken { changing: bool },
 }
 
 impl Line {
-    pub fn from_usize(n: usize) -> Self {
-        match n {
-            6 => Line::BrokenChanging,
-            7 => Line::Unbroken,
-            8 => Line::Broken,
-            9 => Line::UnbrokenChanging,
-            _ => unreachable!(),
+    pub fn new_random(divination_method: DivinationMethod) -> Self {
+        match divination_method {
+            DivinationMethod::CoinToss => Self::from_coin_tosses(),
+            DivinationMethod::AncientYarrowStalk => Self::from_yarrow_stalks(),
         }
     }
+
+    pub fn is_changing(&self) -> bool {
+        match self {
+            Self::Broken { changing } | Self::Unbroken { changing } => *changing,
+        }
+    }
+
+    /// young yin a.k.a. yin unchanging
+    pub const fn broken() -> Self {
+        Self::Broken { changing: false }
+    }
+
+    /// old yin a.k.a. yin changing into yang
+    pub const fn broken_changing() -> Self {
+        Self::Broken { changing: true }
+    }
+
+    /// young yang a.k.a. yang unchanging
+    pub const fn unbroken() -> Self {
+        Self::Unbroken { changing: false }
+    }
+
+    /// old yang a.k.a. yang changing into yin
+    pub const fn unbroken_changing() -> Self {
+        Self::Unbroken { changing: true }
+    }
+
     // Generate a new `Line` by using the coin toss method.
+    // https://en.wikipedia.org/wiki/I_Ching_divination#Coins
     pub fn from_coin_tosses() -> Self {
-        let toss_results: [Coin; 3] = [rand::random(), rand::random(), rand::random()];
-
-        let toss_total = toss_results.iter().fold(0usize, |sum, coin| {
-            sum + match coin {
-                Coin::Tails => 2,
-                Coin::Heads => 3,
-            }
-        });
-
-        match toss_total {
-            6 => Line::BrokenChanging,
-            7 => Line::Unbroken,
-            8 => Line::Broken,
-            9 => Line::UnbrokenChanging,
+        match fastrand::u8(1..=16) {
+            // 2/16
+            1..=2 => Line::broken_changing(),
+            // 6/16
+            3..=8 => Line::broken(),
+            // 2/16
+            9..=10 => Line::unbroken_changing(),
+            // 6/16
+            11..=16 => Line::unbroken(),
             _ => unreachable!(),
         }
     }
 
-    /// `settle` a line with or without "changes". Used during divination to get a pre- and
-    /// post-changes hexagram. The "primary" hexagram's meaning can be changed by the "relating"
-    /// hexagram.
-    pub fn settle(&self, with_change: bool) -> Line {
-        use self::Line::*;
-        if with_change {
-            match self {
-                Broken | UnbrokenChanging => Broken,
-                Unbroken | BrokenChanging => Unbroken,
-            }
-        } else {
-            match self {
-                Broken | BrokenChanging => Broken,
-                Unbroken | UnbrokenChanging => Unbroken,
+    // Generate a new `Line`s with a random distribution based on the ancient yarrow stalk method.
+    // https://en.wikipedia.org/wiki/I_Ching_divination#Yarrow_stalks
+    pub fn from_yarrow_stalks() -> Self {
+        match fastrand::u8(1..=16) {
+            // 1/16
+            1 => Line::broken_changing(),
+            // 7/16
+            2..=8 => Line::broken(),
+            // 3/16
+            9..=11 => Line::unbroken_changing(),
+            // 5/16
+            12..=16 => Line::unbroken(),
+            _ => unreachable!(),
+        }
+    }
+
+    /// `settle` a line that might be "changing". If the line is "changing", it will be settled to
+    /// its opposite state. If the line is not "changing", it will remain unchanged.
+    pub fn settle(&self) -> Line {
+        match self {
+            Self::Broken { changing: false } | Self::Unbroken { changing: true } => Self::broken(),
+            Self::Unbroken { changing: false } | Self::Broken { changing: true } => {
+                Self::unbroken()
             }
         }
     }
 
     /// Print the `Line` as large ASCII art.
     pub fn print_big(&self) {
-        use self::Line::*;
         use crate::symbols::big_line::*;
         match self {
-            BrokenChanging => print!("{}", BIG_BROKEN_CHANGING),
-            Unbroken => print!("{}", BIG_UNBROKEN),
-            Broken => print!("{}", BIG_BROKEN),
-            UnbrokenChanging => print!("{}", BIG_UNBROKEN_CHANGING),
+            Self::Broken { changing: true } => print!("{BROKEN_CHANGING}"),
+            Self::Broken { changing: false } => print!("{BROKEN}"),
+            Self::Unbroken { changing: true } => print!("{UNBROKEN_CHANGING}"),
+            Self::Unbroken { changing: false } => print!("{UNBROKEN}"),
         };
     }
-}
 
-impl Default for Line {
-    /// Generate a random `Line` that may or may not be "changing".
-    fn default() -> Self {
-        rand::random()
-    }
-}
+    fn try_from<N>(n: N) -> Result<Self, Error>
+    where
+        N: Into<BigInt> + TryInto<u8> + Copy,
+    {
+        let n = TryInto::<u8>::try_into(n).map_err(|_err| Error::IntegerOutOfRange(n.into()))?;
 
-impl Display for Line {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        use self::Line::*;
-        let line_string = match self {
-            BrokenChanging => "-X-",
-            Unbroken => "---",
-            Broken => "- -",
-            UnbrokenChanging => "-O-",
-        };
-        write!(f, "{}", line_string)
-    }
-}
-
-impl Distribution<Line> for Standard {
-    /// Generate a random `Line` that may or may not be "changing".
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Line {
-        match rng.gen_range(6..10) {
-            6 => Line::BrokenChanging,
-            7 => Line::Unbroken,
-            8 => Line::Broken,
-            9 => Line::UnbrokenChanging,
-            _ => unreachable!(),
+        match n {
+            6 => Ok(Line::broken_changing()),
+            7 => Ok(Line::unbroken()),
+            8 => Ok(Line::broken()),
+            9 => Ok(Line::unbroken_changing()),
+            _ => Err(Error::IntegerOutOfRange(n.into())),
         }
     }
+}
+
+impl TryFrom<u8> for Line {
+    type Error = Error;
+
+    fn try_from(n: u8) -> Result<Self, Self::Error> {
+        Line::try_from(n)
+    }
+}
+
+impl TryFrom<u32> for Line {
+    type Error = Error;
+
+    fn try_from(n: u32) -> Result<Self, Self::Error> {
+        Line::try_from(n)
+    }
+}
+
+impl TryFrom<i32> for Line {
+    type Error = Error;
+
+    fn try_from(n: i32) -> Result<Self, Self::Error> {
+        Line::try_from(n)
+    }
+}
+
+impl fmt::Display for Line {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        let line_string = match self {
+            Line::Broken { changing: true } => "-X-",
+            Line::Broken { changing: false } => "- -",
+            Line::Unbroken { changing: true } => "-O-",
+            Line::Unbroken { changing: false } => "---",
+        };
+        write!(f, "{line_string}")
+    }
+}
+
+/// Errors related to `Line`s.
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    /// Thrown when creating a `Line` from an integer, if the given integer is not between 6-9 inclusive.
+    #[error(
+        "Invalid conversion from integer to Line. Integer must be between 6-9 inclusive but was {0}"
+    )]
+    IntegerOutOfRange(BigInt),
 }
